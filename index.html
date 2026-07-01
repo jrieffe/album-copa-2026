@@ -1,0 +1,1392 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>⚽ Álbum Copa do Mundo 2026</title>
+<style>
+:root {
+  --bg: #0a0e1a;
+  --surface: #12192e;
+  --surface2: #1a2540;
+  --accent: #FFD700;
+  --accent2: #ff6b35;
+  --green: #22c55e;
+  --red: #ef4444;
+  --gold: #FFD700;
+  --blue: #3b82f6;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --border: #2a3a5c;
+  --radius: 12px;
+  --shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+
+/* HEADER */
+.header { background: linear-gradient(135deg, #0a0e1a 0%, #1a2540 100%); border-bottom: 1px solid var(--border); padding: 12px 16px; position: sticky; top: 0; z-index: 100; }
+.header-top { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.header-logo { font-size: 28px; }
+.header-title { flex: 1; }
+.header-title h1 { font-size: 18px; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
+.header-title p { font-size: 12px; color: var(--text2); }
+.header-stats { display: flex; gap: 8px; flex-wrap: wrap; }
+.stat-pill { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 4px 10px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.stat-pill.green { border-color: var(--green); color: var(--green); }
+.stat-pill.red { border-color: var(--red); color: var(--red); }
+.stat-pill.gold { border-color: var(--gold); color: var(--gold); }
+.progress-bar-wrap { background: var(--border); border-radius: 4px; height: 6px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--green), var(--accent)); border-radius: 4px; transition: width 0.5s ease; }
+.search-wrap { margin-top: 8px; position: relative; }
+.search-wrap input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; padding: 8px 12px 8px 36px; outline: none; transition: border-color 0.2s; }
+.search-wrap input:focus { border-color: var(--accent); }
+.search-wrap .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); opacity: 0.5; font-size: 16px; }
+.search-wrap .clear-btn { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text2); cursor: pointer; font-size: 18px; display: none; padding: 2px 4px; }
+
+/* NAV TABS */
+.tabs { display: flex; background: var(--surface); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { padding: 10px 16px; font-size: 13px; font-weight: 600; color: var(--text2); cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; transition: all 0.2s; user-select: none; }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab:hover { color: var(--text); }
+
+/* LAYOUT */
+.layout { display: flex; min-height: calc(100vh - 140px); }
+.sidebar { width: 220px; background: var(--surface); border-right: 1px solid var(--border); overflow-y: auto; flex-shrink: 0; }
+.main { flex: 1; overflow-y: auto; padding: 16px; }
+@media (max-width: 640px) {
+  .sidebar { display: none; }
+  .layout { flex-direction: column; }
+  .main { padding: 12px; }
+}
+
+/* SIDEBAR */
+.sidebar-section { padding: 8px 0; }
+.sidebar-group-label { font-size: 10px; font-weight: 700; color: var(--text2); letter-spacing: 1px; padding: 8px 12px 4px; text-transform: uppercase; }
+.sidebar-item { display: flex; align-items: center; gap: 8px; padding: 7px 12px; cursor: pointer; border-left: 3px solid transparent; transition: all 0.15s; user-select: none; }
+.sidebar-item:hover { background: var(--surface2); }
+.sidebar-item.active { background: var(--surface2); border-left-color: var(--accent); }
+.sidebar-item .flag { font-size: 18px; width: 24px; text-align: center; }
+.sidebar-item .info { flex: 1; min-width: 0; }
+.sidebar-item .name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sidebar-item .progress { font-size: 10px; color: var(--text2); margin-top: 2px; }
+.sidebar-mini-bar { height: 3px; background: var(--border); border-radius: 2px; margin-top: 3px; overflow: hidden; }
+.sidebar-mini-fill { height: 100%; background: var(--green); border-radius: 2px; }
+
+/* COUNTRY GRID (visão geral) */
+.country-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+.country-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
+.country-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow); }
+.country-card.active { border-color: var(--accent); background: var(--surface2); }
+.country-card .flag { font-size: 36px; text-align: center; margin-bottom: 8px; }
+.country-card .cname { font-size: 14px; font-weight: 700; text-align: center; margin-bottom: 4px; }
+.country-card .cgroup { font-size: 11px; color: var(--text2); text-align: center; margin-bottom: 8px; }
+.country-card .cprog { font-size: 12px; color: var(--green); text-align: center; font-weight: 600; }
+.country-card .cbar { height: 4px; background: var(--border); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+.country-card .cbar-fill { height: 100%; background: linear-gradient(90deg, var(--green), var(--accent)); border-radius: 2px; transition: width 0.4s; }
+.country-card .cbadge { position: absolute; top: 8px; right: 8px; background: var(--red); color: white; font-size: 10px; font-weight: 700; border-radius: 10px; padding: 1px 6px; }
+.country-card .cbadge.gold { background: var(--gold); color: #000; }
+
+/* STICKER VIEW */
+.section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+.section-flag { font-size: 40px; }
+.section-info h2 { font-size: 20px; font-weight: 800; }
+.section-info p { font-size: 13px; color: var(--text2); margin-top: 2px; }
+.section-stats { display: flex; gap: 8px; margin-left: auto; flex-wrap: wrap; }
+.back-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); cursor: pointer; font-size: 13px; padding: 6px 12px; transition: all 0.2s; margin-bottom: 12px; display: none; }
+.back-btn:hover { border-color: var(--accent); color: var(--accent); }
+@media (max-width: 640px) { .back-btn { display: flex; align-items: center; gap: 6px; } }
+
+/* STICKER GRID */
+.sticker-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
+@media (max-width: 480px) { .sticker-grid { grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 8px; } }
+
+.sticker-card { background: var(--surface); border: 2px solid var(--border); border-radius: 10px; padding: 10px 8px; text-align: center; cursor: pointer; transition: all 0.2s; user-select: none; position: relative; }
+.sticker-card:active { transform: scale(0.95); }
+
+.sticker-card.missing { border-color: var(--red); background: rgba(239,68,68,0.05); }
+.sticker-card.collected { border-color: var(--green); background: rgba(34,197,94,0.08); }
+.sticker-card.double { border-color: var(--gold); background: rgba(255,215,0,0.08); }
+
+.sticker-card .sticker-status { font-size: 22px; margin-bottom: 4px; }
+.sticker-card .sticker-code { font-size: 11px; font-weight: 700; color: var(--text2); letter-spacing: 0.5px; }
+.sticker-card .sticker-player { font-size: 10px; color: var(--text); margin-top: 3px; line-height: 1.3; font-weight: 500; min-height: 28px; display: flex; align-items: center; justify-content: center; }
+.sticker-card.missing .sticker-player { color: var(--text2); }
+
+/* STATUS LABELS */
+.sticker-card .status-label { position: absolute; top: -6px; right: -6px; font-size: 9px; font-weight: 800; border-radius: 8px; padding: 1px 5px; letter-spacing: 0.3px; }
+.sticker-card.missing .status-label { background: var(--red); color: white; content: "FALTA"; }
+.sticker-card.collected .status-label { background: var(--green); color: white; }
+.sticker-card.double .status-label { background: var(--gold); color: #000; }
+
+/* FILTER BAR */
+.filter-bar { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+.filter-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; color: var(--text2); cursor: pointer; font-size: 12px; font-weight: 600; padding: 5px 12px; transition: all 0.2s; }
+.filter-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(255,215,0,0.1); }
+.filter-btn:hover { border-color: var(--text); color: var(--text); }
+
+/* TRADE SECTION */
+.trade-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-top: 16px; }
+.trade-section h3 { font-size: 14px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.trade-list { display: flex; gap: 6px; flex-wrap: wrap; }
+.trade-tag { background: var(--surface2); border: 1px solid; border-radius: 6px; font-size: 11px; font-weight: 600; padding: 3px 8px; }
+.trade-tag.have { border-color: var(--gold); color: var(--gold); }
+.trade-tag.need { border-color: var(--red); color: var(--red); }
+
+/* LEGEND */
+.legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 12px; font-size: 12px; }
+.legend-item { display: flex; align-items: center; gap: 6px; color: var(--text2); }
+.legend-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid; }
+.legend-dot.missing { border-color: var(--red); background: rgba(239,68,68,0.2); }
+.legend-dot.collected { border-color: var(--green); background: rgba(34,197,94,0.2); }
+.legend-dot.double { border-color: var(--gold); background: rgba(255,215,0,0.2); }
+
+/* INSTRUCTIONS */
+.instructions { background: linear-gradient(135deg, rgba(255,215,0,0.05), rgba(255,107,53,0.05)); border: 1px solid rgba(255,215,0,0.2); border-radius: var(--radius); padding: 12px 16px; margin-bottom: 16px; font-size: 13px; line-height: 1.6; }
+.instructions strong { color: var(--accent); }
+
+/* MODAL */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; max-width: 400px; width: 100%; padding: 24px; position: relative; }
+.modal h2 { font-size: 20px; margin-bottom: 8px; }
+.modal p { color: var(--text2); font-size: 14px; line-height: 1.6; margin-bottom: 16px; }
+.modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--text2); cursor: pointer; font-size: 24px; line-height: 1; }
+.modal-btns { display: flex; gap: 8px; flex-direction: column; }
+.modal-btn { border: 2px solid; border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 700; padding: 12px; text-align: center; transition: all 0.2s; }
+.modal-btn.collected { border-color: var(--green); background: rgba(34,197,94,0.1); color: var(--green); }
+.modal-btn.double { border-color: var(--gold); background: rgba(255,215,0,0.1); color: var(--gold); }
+.modal-btn.missing { border-color: var(--red); background: rgba(239,68,68,0.1); color: var(--red); }
+.modal-btn:hover { opacity: 0.8; transform: scale(1.02); }
+
+/* RESET BTN */
+.reset-btn { background: none; border: 1px solid var(--border); border-radius: 8px; color: var(--text2); cursor: pointer; font-size: 12px; padding: 6px 12px; }
+.reset-btn:hover { border-color: var(--red); color: var(--red); }
+
+/* TOOLBAR */
+.toolbar { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
+.tool-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); cursor: pointer; font-size: 12px; font-weight: 600; padding: 6px 11px; transition: all 0.2s; white-space: nowrap; }
+.tool-btn:hover { border-color: var(--accent); color: var(--accent); }
+.tool-btn.primary { border-color: var(--green); color: var(--green); }
+.tool-btn.primary:hover { background: rgba(34,197,94,0.15); }
+.tool-btn.warning { border-color: var(--gold); color: var(--gold); }
+.tool-btn.warning:hover { background: rgba(255,215,0,0.1); }
+.tool-btn.print-btn { border-color: var(--blue); color: var(--blue); }
+.tool-btn.print-btn:hover { background: rgba(59,130,246,0.1); }
+.db-status { font-size: 11px; color: var(--text2); display: flex; align-items: center; gap: 4px; margin-left: auto; }
+.db-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text2); }
+.db-dot.saved { background: var(--green); }
+.db-dot.unsaved { background: var(--gold); animation: pulse 1s infinite; }
+.name-input { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 12px; padding: 5px 10px; outline: none; width: 160px; }
+.name-input:focus { border-color: var(--accent); }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+/* PRINT STYLES */
+@media print {
+  body { background: white !important; color: black !important; }
+  .no-print { display: none !important; }
+  .print-only { display: block !important; }
+}
+.print-only { display: none; }
+
+/* GROUPS OVERVIEW */
+.groups-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.group-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.group-header { background: linear-gradient(135deg, #1a2540, #243060); padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; }
+.group-header h3 { font-size: 15px; font-weight: 800; }
+.group-header .gprog { font-size: 12px; color: var(--text2); }
+.group-teams { padding: 8px; }
+.group-team-row { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 6px; margin-bottom: 2px; cursor: pointer; transition: all 0.15s; }
+.group-team-row:hover { background: var(--surface2); }
+.group-team-row .flag { font-size: 20px; }
+.group-team-row .tname { flex: 1; font-size: 13px; font-weight: 600; }
+.group-team-row .tprog { font-size: 11px; color: var(--text2); text-align: right; }
+.group-team-row .tmini { width: 60px; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.group-team-row .tmini-fill { height: 100%; background: var(--green); border-radius: 2px; }
+
+/* EMPTY STATE */
+.empty-state { text-align: center; padding: 60px 20px; color: var(--text2); }
+.empty-state .icon { font-size: 60px; margin-bottom: 16px; }
+.empty-state h3 { font-size: 18px; color: var(--text); margin-bottom: 8px; }
+
+/* MISSING LIST */
+.missing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.missing-item { background: var(--surface); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; }
+.missing-item .flag { font-size: 22px; }
+.missing-item .minfo { flex: 1; }
+.missing-item .mcode { font-size: 12px; font-weight: 700; color: var(--red); }
+.missing-item .mplayer { font-size: 11px; color: var(--text2); margin-top: 2px; }
+
+/* TOAST */
+.toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 20px; font-size: 14px; font-weight: 600; transition: transform 0.3s; z-index: 2000; pointer-events: none; }
+.toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header no-print">
+  <div class="header-top">
+    <div class="header-logo">🏆</div>
+    <div class="header-title">
+      <h1>Álbum Copa do Mundo 2026</h1>
+      <p id="headerSub">FIFA World Cup 2026™ — Panini</p>
+    </div>
+    <button class="reset-btn" onclick="confirmReset()">🔄 Resetar</button>
+  </div>
+  <div class="header-stats" id="headerStats"></div>
+  <div class="progress-bar-wrap" style="margin-top:8px">
+    <div class="progress-bar-fill" id="mainProgressBar" style="width:0%"></div>
+  </div>
+  <div class="search-wrap" style="margin-top:8px">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Buscar figurinha ou jogador..." oninput="handleSearch()">
+    <button class="clear-btn" id="clearSearch" onclick="clearSearch()">✕</button>
+  </div>
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <input id="childName" class="name-input" type="text" placeholder="✏️ Nome da criança..." oninput="saveChildName()">
+    <button class="tool-btn primary" onclick="saveToFile()" title="Salvar dados em arquivo JSON independente">💾 Salvar BD</button>
+    <button class="tool-btn" onclick="loadFromFile()" title="Carregar dados de arquivo JSON salvo anteriormente">📂 Carregar BD</button>
+    <button class="tool-btn warning" onclick="downloadBackup()" title="Baixar cópia de segurança JSON">⬇️ Backup</button>
+    <button class="tool-btn" onclick="document.getElementById('uploadInput').click()" title="Restaurar de backup JSON">⬆️ Restaurar</button>
+    <button class="tool-btn print-btn" onclick="printReport()" title="Gerar lista imprimível para trocas">🖨️ Imprimir Lista</button>
+    <div class="db-status">
+      <div class="db-dot" id="dbDot"></div>
+      <span id="dbStatusText">localStorage</span>
+    </div>
+  </div>
+</div>
+<input type="file" id="uploadInput" accept=".json" style="display:none" onchange="restoreFromUpload(this)">
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('overview')" id="tab-overview">🌍 Visão Geral</div>
+  <div class="tab" onclick="switchTab('grupos')" id="tab-grupos">📋 Por Grupo</div>
+  <div class="tab" onclick="switchTab('stickers')" id="tab-stickers">🃏 Figurinhas</div>
+  <div class="tab" onclick="switchTab('missing')" id="tab-missing">❌ Faltam</div>
+  <div class="tab" onclick="switchTab('trade')" id="tab-trade">⭐ Para Trocar</div>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+  <div class="sidebar" id="sidebar"></div>
+  <div class="main" id="mainContent"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modalContent">
+    <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const TEAMS = {
+  // GROUP A
+  KOR: { name:"Coreia do Sul", flag:"🇰🇷", group:"A", conf:"AFC",
+    s:[["KOR 1","HYEONWOO JO",1],["KOR 2","INBEOM HWANG",1],["KOR 3","SEUNGGYU KIM",1],["KOR 4","MINJAE KIM",1],["KOR 5","YUMIN CHO",1],["KOR 6","YOUNGWOO SEOL",1],["KOR 7","SEUNGHO PAIK",1],["KOR 8","HANBEOM LEE",1],["KOR 9","TAESEOK LEE",1],["KOR 10","MYUNGJAE LEE",0],["KOR 11","JAESUNG LEE",1],["KOR 13","",0],["KOR 17","GUESUNG CHO",0],["KOR EMBLEMA","Emblema da Federação Coreana (KFA)",1]]},
+  MEX: { name:"México", flag:"🇲🇽", group:"A", conf:"CONCACAF",
+    s:[["MEX 0","Emblema México",1],["MEX 1","Luis Malagón",1],["MEX 4","Jorge Sánchez",0],["MEX 5","Johan Vásquez",1],["MEX 6","César Montes",1],["MEX 7","Jesús Gallardo",1],["MEX 8","Israel Reyes",1],["MEX 9","Diego Lainez",1],["MEX 10","Carlos Rodríguez",1],["MEX 11","Orbelín Pineda",0],["MEX 12","Edson Álvarez",1],["MEX 13","Erick Sánchez",1],["MEX 14","ERICK SÁNCHEZ",1],["MEX 15","HIRVING LOZANO",1],["MEX 16","SANTIAGO GIMÉNEZ",1],["MEX 17","RAÚL JIMÉNEZ",1],["MEX 18","ALEXIS VEGA",1],["MEX 19","ROBERTO ALVARADO",1],["MEX 20","CÉSAR HUERTA",1]]},
+  CZE: { name:"República Tcheca", flag:"🇨🇿", group:"A", conf:"UEFA",
+    s:[["CZE 1","",0],["CZE 2","MATĚJ KOVÁŘ",0],["CZE 3","JINDŘICH STANĚK",0],["CZE 4","LADISLAV KREJČÍ",0],["CZE 5","VLADIMÍR COUFAL",0],["CZE 6","JAROSLAV ZELENÝ",0],["CZE 7","TOMÁŠ HOLEŠ",1],["CZE 8","DAVID ZIMA",0],["CZE 9","MICHAL SADÍLEK",1],["CZE 10","LUKÁŠ PROVOD",0],["CZE 11","LUKÁŠ ČERV",1],["CZE 12","TOMÁŠ SOUČEK",0],["CZE 14","PAVEL ŠULC",1],["CZE 15","MATĚJ VYDRA",0],["CZE 16","VASIL KUŠEJ",0],["CZE 17","TOMÁŠ CHORÝ",0],["CZE 18","VÁCLAV ČERNÝ",1],["CZE 19","ADAM HLOŽEK",1],["CZE 20","PATRIK SCHICK",1],["CZE TEAM","Seleção da República Tcheca",1]]},
+  RSA: { name:"África do Sul", flag:"🇿🇦", group:"A", conf:"CAF",
+    s:[["RSA 1","ROUWEN WILLIAMS",1],["RSA 2","",0],["RSA 3","SIPHO CHAINE",1],["RSA 4","AUBREY MODIBA",1],["RSA 5","SAMUKELE KABINI",0],["RSA 6","MBEKEZELI MBOKAZI",0],["RSA 7","KHULUMANI NDAMANE",0],["RSA 8","GIVABONDA NGEZANA",1],["RSA 9","KHUUSO MUDAU",1],["RSA 10","NKOSINATHI SIBISI",1],["RSA 13","TEBOHO MOKOENA",1],["RSA 14","THALENTE MBATHA",1],["RSA 15","VAYA SITHOLE",0],["RSA 16","SIPHO MBULE",1],["RSA 17","LYLE FOSTER",0],["RSA 18","BATHUSI AUBAAS",1],["RSA 19","MOHAU NKOTA",1],["RSA 20","IORAAM RAYNERS",1],["RSA 21","OSWIN APPOLLIS",1],["RSA TEAM","Emblema da Seleção Sul-Africana",1]]},
+  // GROUP B
+  QAT: { name:"Catar", flag:"🇶🇦", group:"B", conf:"AFC",
+    s:[["QAT 1","",0],["QAT 2","MESHAAL BARSHAM",0],["QAT 3","SULTAN ALBRAKE",0],["QAT 4","LUCAS MENDES",1],["QAT 5","HOMAM AHMED",1],["QAT 6","BOUALEM KHOUKHI",1],["QAT 7","PEDRO MIGUEL",1],["QAT 8","TAREK SALMAN",1],["QAT 9","MOHAMMED MANNAI",1],["QAT 10","KARIM BOUDIAF",1],["QAT 11","ASSIM MADIBO",0],["QAT 12","HAMED FATEHI",1],["QAT 13","Emblema do Catar",1],["QAT 14","MOHAMMED WAAD",0],["QAT 15","ABDULAZIZ HATEM",1],["QAT 16","HASSAN AL-HAYDOS",1],["QAT 17","EDMÍLSON JUNIOR",1],["QAT 18","AKRAM HASSAN AFIF",1],["QAT 19","AHMED AL-GANEHI",1],["QAT 20","ALMOEZ ALI",0]]},
+  BIH: { name:"Bósnia-Herzegovina", flag:"🇧🇦", group:"B", conf:"UEFA",
+    s:[["BIH 1","FIFA World Cup 2026 Logo",1],["BIH 2","NIKOLA VASILJ",1],["BIH 3","AMAR DEDIĆ",0],["BIH 4","SEAD KOLAŠINAC",0],["BIH 5","TARIK MUHAREMOVIĆ",1],["BIH 6","NIHAD MUJAKIĆ",1],["BIH 7","NIKOLA KATIĆ",0],["BIH 8","AMIR HADŽIAHMETOVIĆ",1],["BIH 9","BENJAMIN TAHIROVIĆ",1],["BIH 10","ARMIN GIGOVIĆ",1],["BIH 11","IVAN ŠUNJIĆ",1],["BIH 12","IVAN BAŠIĆ",0],["BIH 13","ESMIR BAJRAKTAREVIĆ",1],["BIH 14","DŽENIS BURNIĆ",1],["BIH 15","AMAR MEMIĆ",1],["BIH 17","ERMEDIN DEMIROVIĆ",0],["BIH 18","EDIN DŽEKO",1],["BIH 19","SAMED BAŽDAR",0],["BIH 20","HARIS TABAKOVIĆ",0],["BIH TEAM","Emblema da Seleção Bósnia-Herzegovina",1]]},
+  CAN: { name:"Canadá", flag:"🇨🇦", group:"B", conf:"CONCACAF",
+    s:[["CAN 1","",1],["CAN 2","DAYNE ST. CLAIR",0],["CAN 3","ALPHONSO DAVIES",0],["CAN 4","ALISTAIR JOHNSTON",0],["CAN 5","SAMUEL ADEKUGBE",1],["CAN 6","RICHIE LARVEA",1],["CAN 7","DEREK CORNELIUS",1],["CAN 8","MOÏSE BOMBITO",0],["CAN 9","KAMAL MILLER",1],["CAN 10","STEPHEN EUSTAQUIO",1],["CAN 11","ISMAEL KONÉ",1],["CAN 12","JONATHAN OSORIO",1],["CAN 13","",1],["CAN 14","JACOB SHAFFELBURG",1],["CAN 15","MATHIEU CHOINIÈRE",1],["CAN 16","NIKO SIGUR",1],["CAN 17","TAJON BUCHANAN",1],["CAN 18","LIAM MILLAR",1],["CAN 19","CYLE LARIN",1],["CAN 20","JONATHAN DAVID",1]]},
+  SUI: { name:"Suíça", flag:"🇨🇭", group:"B", conf:"UEFA",
+    s:[["SUI 2","Gregor Kobel",0],["SUI 3","Yvon Mvogo",0],["SUI 4","Manuel Akanji",0],["SUI 5","Ricardo Rodríguez",1],["SUI 6","Nico Elvedi",1],["SUI 7","Aurèle Amenda",1],["SUI 8","Silvan Widmer",1],["SUI 9","Granit Xhaka",0],["SUI 10","Denis Zakaria",1],["SUI 11","Remo Freuler",1],["SUI 12","Fabian Rieder",1],["SUI 13","",0],["SUI 14","Ardon Jashari",1],["SUI 15","Johan Manzambi",0],["SUI 16","Michel Aebischer",1],["SUI 17","Breel Embolo",0],["SUI 18","Rubén Vargas",1],["SUI 19","Dan Ndoye",0],["SUI 20","Zeki Amdouni",0]]},
+  // GROUP C
+  BRA: { name:"Brasil", flag:"🇧🇷", group:"C", conf:"CONMEBOL",
+    s:[["BRA 1","ALISSON",1],["BRA 2","BRUNO G",1],["BRA 3","BENTO",1],["BRA 4","MARQUINHOS",1],["BRA 5","ÉDER MILITÃO",1],["BRA 6","GABRIEL MAGALHÃES",1],["BRA 7","DANILO",1],["BRA 8","WESLEY",0],["BRA 9","LUCAS PAQUETÁ",1],["BRA 10","CASEMIRO",1],["BRA 11","Bruno Guimarães",1],["BRA 12","Luiz Henrique",0],["BRA 13","",0],["BRA 14","Vinícius Júnior",1],["BRA 15","Rodrygo",0],["BRA 16","João Pedro",1],["BRA 17","Matheus Cunha",0],["BRA 18","Gabriel Martinelli",1],["BRA 19","Raphinha",1],["BRA 20","Estêvão",1],["BRA EMBLEMA","Emblema da CBF",1]]},
+  SCO: { name:"Escócia", flag:"🏴󠁧󠁢󠁳󠁣󠁴󠁿", group:"C", conf:"UEFA",
+    s:[["SCO 1","",0],["SCO 2","ANGUS GUNN",1],["SCO 3","JACK HENDRY",1],["SCO 4","KIERAN TIERNEY",1],["SCO 5","AARON HICKEY",0],["SCO 6","ANDREW ROBERTSON",0],["SCO 7","SCOTT MCKENNA",1],["SCO 8","JOHN SOUTTAR",1],["SCO 9","ANTHONY RALSTON",1],["SCO 10","GRANT HANLEY",1],["SCO 11","Scott McTominay",1],["SCO 12","Billy Gilmour",0],["SCO 13","",0],["SCO 14","Lewis Ferguson",0],["SCO 15","Ryan Christie",0],["SCO 16","Kenny McLean",1],["SCO 17","John McGinn",1],["SCO 18","Lyndon Dykes",1],["SCO 19","Che Adams",1],["SCO 20","Ben Gannon-Doak",1]]},
+  HAI: { name:"Haiti", flag:"🇭🇹", group:"C", conf:"CONCACAF",
+    s:[["HAI 1","JOHNY PLACIDE",1],["HAI 2","CARLENS ARCUS",1],["HAI 3","MARTIN EXPÉRIENCE",1],["HAI 4","JEAN-KÉVIN DUVERNE",1],["HAI 5","RICARDO ADÉ",1],["HAI 6","DUKE LACROIX",1],["HAI 7","GARVEN METUSALA",1],["HAI 9","HANNES DELCROIX",0],["HAI 10","LEVERTON PIERRE",1],["HAI 11","DANLEY JEAN JACQUES",1],["HAI 12","JEAN-RICNER BELLEGARDE",0],["HAI 13","",0],["HAI 14","CHRISTOPHER ATTYS",0],["HAI 15","DERRICK ETIENNE JR.",1],["HAI 16","JOSUÉ CASIMIR",1],["HAI 17","RUBEN PROVIDENCE",1],["HAI 18","DUCKENS NAZON",1],["HAI 19","LOUIGIUS DEEDSON",0],["HAI 20","FRANTZDY PIERROT",1]]},
+  MAR: { name:"Marrocos", flag:"🇲🇦", group:"C", conf:"CAF",
+    s:[["MAR 2","YASSINE BOUNOU",0],["MAR 3","MUNIR EL KAJOUI",0],["MAR 4","ACHRAF HAKIMI",1],["MAR 5","NOUSSAIR MAZRAOUI",1],["MAR 6","NAYEF AGUERD",1],["MAR 7","ROMAIN SAÏSS",1],["MAR 8","JAWAD EL YAMIQ",1],["MAR 9","ADAM MASINA",0],["MAR 10","SOFYAN AMRABAT",1],["MAR 11","Emblema da Seleção Marroquina",1],["MAR 12","Azzedine Ounahi",1],["MAR 13","Eliesse Ben Seghir",1],["MAR 14","Bilal El Khannouss",1],["MAR 15","Ismael Saibari",0],["MAR 16","Youssef En-Nesyri",0],["MAR 17","Abde Ezzalzouli",1],["MAR 18","Soufiane Rahimi",0],["MAR 19","Brahim Díaz",0],["MAR 20","Ayoub El Kaabi",0]]},
+  // GROUP D
+  USA: { name:"Estados Unidos", flag:"🇺🇸", group:"D", conf:"CONCACAF",
+    s:[["USA 1","",0],["USA 2","Matt Freese",0],["USA 3","Chris Richards",0],["USA 4","Tim Ream",0],["USA 5","Mark McKenzie",0],["USA 6","Alex Freeman",0],["USA 7","Antonee Robinson",0],["USA 8","Tyler Adams",0],["USA 9","Tanner Tessmann",0],["USA 10","Weston McKennie",0],["USA 11","Cristian Roldan",0],["USA 12","Timothy Weah",1],["USA 13","",1],["USA 14","Diego Luna",0],["USA 15","Malik Tillman",1],["USA 16","Christian Pulisic",1],["USA 17","Brenden Aaronson",0],["USA 18","Ricardo Pepi",1],["USA 19","Haji Wright",1],["USA 20","Folarin Balogun",0]]},
+  TUR: { name:"Turquia", flag:"🇹🇷", group:"D", conf:"UEFA",
+    s:[["TUR 1","",0],["TUR 2","ABDÜLKERIM BARDAKCI",1],["TUR 3","MERT MÜLDÜR",0],["TUR 4","ZEKI ÇELIK",0],["TUR 5","ÇAGLAR SOYUNCU",1],["TUR 6","ISMAIL YÜKSEK",1],["TUR 7","MERIH DEMIRAL",0],["TUR 8","FERDI KADIOGLU",0],["TUR 9","İSMAİL VÜKSEK",1],["TUR 10","",0],["TUR 11","HAKAN ÇALHANOGLU",0],["TUR 12","ORKUN KÖKÇÜ",0],["TUR 13","",0],["TUR 14","",1],["TUR 15","",0],["TUR 16","ARDA GÜLER",0],["TUR 17","IRFAN CAN KAHVECI",0],["TUR 18","YUNUS AKGÜN",1],["TUR 19","BARIS ALPER YILMAZ",0],["TUR 20","KEREM AKTÜRKOGLU",0],["TUR 21","CAN UZUN",1],["TUR 22","KENAN YILDIZ",1],["TUR (ARDA GÜLER)","ARDA GÜLER",1],["TUR (İRFAN CAN KAHVECİ)","İRFAN CAN KAHVECİ",1],["TUR (BARIŞ ALPER YILMAZ)","BARIŞ ALPER YILMAZ",1]]},
+  AUS: { name:"Austrália", flag:"🇦🇺", group:"D", conf:"AFC",
+    s:[["AUS 1","",0],["AUS 2","Mathew Ryan",1],["AUS 3","Joe Gauci",1],["AUS 4","",0],["AUS 5","",0],["AUS 6","Jordan Bos",1],["AUS 7","",0],["AUS 8","",1],["AUS 9","Lewis Miller",1],["AUS 10","",0],["AUS 11","JACKSON IRVINE",1],["AUS 12","RILEY MCGREE",0],["AUS 13","AIDEN O'NEILL",0],["AUS 14","CONNOR METCALFE",1],["AUS 15","KUSINI YENGI",1],["AUS 16","PATRICK YAZBEK",0],["AUS 17","CRAIG GOODWIN",1],["AUS 18","NESTORY IRANKUNDA",1],["AUS 19","NESTORY IRANKUNDA",1],["AUS 20","MOHAMED TOURÉ",0]]},
+  PAR: { name:"Paraguai", flag:"🇵🇾", group:"D", conf:"CONMEBOL",
+    s:[["PAR 1","ORLANDO GILL",1],["PAR 2","ROBERTO FERNÁNDEZ",0],["PAR 3","GUSTAVO GÓMEZ",1],["PAR 5","FABIÁN BALBUENA",0],["PAR 6","JUAN JOSÉ CÁCERES",0],["PAR 7","OMAR ALDERETE",1],["PAR 8","JÚNIOR ALONSO",1],["PAR 9","MATHIAS VILLASANTI",1],["PAR 10","DIEGO GÓMEZ",0],["PAR 11","DAMIAN BOBADILLA",0],["PAR 12","ANDRÉS CUBAS",0],["PAR 14","MATÍAS GALARZA FONDA",0],["PAR 15","JULIO ENCISO",0],["PAR 16","ALEJANDRO ROMERO GAMARRA",0],["PAR 17","MIGUEL ALMIRÓN",0],["PAR 18","RAMÓN SOSA",1],["PAR 19","ÁNGEL ROMERO",0],["PAR 20","ANTONIO SANABRIA",0],["PAR TEAM","Emblema da Seleção Paraguaia",1],["PAR TEAM LOGO","Emblema do Paraguai",1]]},
+  // GROUP E
+  CIV: { name:"Costa do Marfim", flag:"🇨🇮", group:"E", conf:"CAF",
+    s:[["CIV 1","YAHIA FOFANA",0],["CIV 2","GHISLAIN KONAN",1],["CIV 3","WILFRIED SINGO",1],["CIV 4","ODILON KOSSOUNOU",1],["CIV 5","EVAN NDICKA",1],["CIV 6","WILLY BOLY",1],["CIV 7","EMMANUEL AGBADOU",1],["CIV 8","OUSMANE DIOMANDE",1],["CIV 9","FRANCK KESSIE",1],["CIV 10","FRANCK KESSIÉ",1],["CIV 11","SEKO FOFANA",1],["CIV 12","IBRAHIM SANGARE",0],["CIV 13","JEAN-PHILIPPE GBAMIN",0],["CIV 14","AMAD DIALLO",1],["CIV 15","SÉBASTIEN HALLER",1],["CIV 16","SÉBASTIEN HALLER",1],["CIV 17","SIMON ADINGRA",1],["CIV 18","YAN DIOMANDE",0],["CIV 19","EVANN GUESSAND",0],["CIV 20","SIMON ADINGRA",1],["CIV 21","OUMAR DIAKITÉ",1]]},
+  CUW: { name:"Curaçao", flag:"🇨🇼", group:"E", conf:"CONCACAF",
+    s:[["CUW 1","ELOY ROOM",0],["CUW 2","ARMANDO OBISPO",0],["CUW 3","SHEREL FLORANUS",0],["CUW 4","ROSHON VAN EIJMA",1],["CUW 5","Jurien Gaari",1],["CUW 6","JOSHUA BRENET",0],["CUW 7","JURIEN GAARI",1],["CUW 8","SHURANDY SAMBO",1],["CUW 9","LIVANO COMENENCIA",1],["CUW 10","GODFRIED ROEMERATOE",0],["CUW 11","JUNINHO BACUNA",1],["CUW 12","LEANDRO BACUNA",1],["CUW 13","",0],["CUW 14","TAHITH CHONG",0],["CUW 15","KENJI GORRÉ",1],["CUW 16","JEARL MARGARITHA",0],["CUW 17","JÜRGEN LOCADIA",1],["CUW 18","JEREMY ANTONISSE",0],["CUW 19","GERVANE KASTANEER",0],["CUW 20","SONTJE HANSEN",1]]},
+  ECU: { name:"Equador", flag:"🇪🇨", group:"E", conf:"CONMEBOL",
+    s:[["ECU 1","HERNAN GALINDEZ",1],["ECU 2","Hernán Galíndez",1],["ECU 3","PIERO HINCAPIÉ",1],["ECU 4","GONZALO VALLE",0],["ECU 5","PERVIS ESTUPIÑAN",1],["ECU 6","WILLIAN PACHO",1],["ECU 7","ÁNGELO PRECIADO",0],["ECU 8","JOEL ORDOÑEZ",0],["ECU 9","MOISES CAICEDO",0],["ECU 10","ALAN FRANCO",1],["ECU 11","KENDRY PÁEZ",1],["ECU 12","PEDRO VITE",0],["ECU 13","",1],["ECU 14","John Yeboah",1],["ECU 15","Leonardo Campana",1],["ECU 16","JOHN YEBOAH",0],["ECU 17","NILSON ANGULO",0],["ECU 18","ALAN MINDA",1],["ECU 19","GONZALO PLATA",1],["ECU 20","KEVIN RODRÍGUEZ",1],["ECU 21","ENNER VALENCIA",1],["ECU 22","LEONARDO CAMPANA",1]]},
+  GER: { name:"Alemanha", flag:"🇩🇪", group:"E", conf:"UEFA",
+    s:[["GER 1","MARC-ANDRÉ TER STEGEN",0],["GER 2","JONATHAN TAH",0],["GER 3","WALDEMAR ANTON",1],["GER 4","DAVID RAUM",0],["GER 5","NICO SCHLOTTERBECK",0],["GER 6","ANTONIO RÜDIGER",1],["GER 7","WALDEMAR ANTON",1],["GER 8","RIDDLE BAKU",1],["GER 9","MAXIMILIAN MITTELSTÄDT",0],["GER 10","JOSHUA KIMMICH",1],["GER 11","FLORIAN WIRTZ",1],["GER 12","",0],["GER 13","FELIX NMECHA",1],["GER 14","LEON GORETZKA",0],["GER 15","JAMAL MUSIALA",0],["GER 16","SERGE GNABRY",1],["GER 17","KAI HAVERTZ",1],["GER 18","KAI HAVERTZ",0],["GER 19","LEROY SANÉ",0],["GER 20","KARIM ADEYEMI",1],["GER 21","NICK WOLTEMADE",1]]},
+  // GROUP F
+  JPN: { name:"Japão", flag:"🇯🇵", group:"F", conf:"AFC",
+    s:[["JPN 1","ZION SUZUKI",1],["JPN 2","HENRY HEROKI MOCHIZUKI",1],["JPN 3","HENRY HEROKI MOCHIZUKI",1],["JPN 4","AYUMU SEKO",0],["JPN 5","SHOGO TANIGUCHI",0],["JPN 6","JUNNOSUKE SUZUKI",1],["JPN 7","TSUYOSHI WATANABE",0],["JPN 8","KAISHU SANO",0],["JPN 9","YUKI SOMA",0],["JPN 10","AO TANAKA",1],["JPN 11","DACHI KAMADA",1],["JPN 12","RITSU DOAN",1],["JPN 13","TAKEFUSA KUBO",0],["JPN 14","Daichi Kamada",1],["JPN 15","KEITO NAKAMURA",1],["JPN 16","TAKUMI MINAMINO",1],["JPN 17","SHUTO MACHINO",0],["JPN 18","JUNYA ITO",1],["JPN 19","KOKI OGAWA",0],["JPN 20","AYASE UEDA",0],["JPN 21","AYASE UEDA",1],["JPN 22","SHUTO MACHINO",1],["JPN TEAM","Emblema da Seleção Japonesa",1]]},
+  NED: { name:"Países Baixos", flag:"🇳🇱", group:"F", conf:"UEFA",
+    s:[["NED 1","BART VERBRUGGEN",1],["NED 2","BART VERBRUGGEN",1],["NED 3","VIRGIL VAN DIJK",0],["NED 4","MICKY VAN DE VEN",1],["NED 5","NATHAN AKÉ",1],["NED 6","JURRIEN TIMBER",0],["NED 7","DENZEL DUMFRIES",1],["NED 8","JAN PAUL VAN HECKE",0],["NED 9","JEREMIE FRIMPONG",0],["NED 10","TIJJANI REIJNDERS",1],["NED 11","RYAN GRAVENBERCH",1],["NED 12","Teun Koopmeiners",1],["NED 13","TEUN KOOPMEINERS",0],["NED 14","FRENKIE DE JONG",0],["NED 15","",0],["NED 16","XAVI SIMONS",0],["NED 17","JUSTIN KLUIVERT",1],["NED 18","DONYELL MALEN",0],["NED 19","WOUT WEGHORST",1],["NED 20","MEMPHIS DEPAY",1],["NED 21","CODY GAKPO",1]]},
+  SWE: { name:"Suécia", flag:"🇸🇪", group:"F", conf:"UEFA",
+    s:[["SWE 1","VIKTOR JOHANSSON",0],["SWE 2","Viktor Johansson",1],["SWE 3","ISAK HIEN",0],["SWE 4","GABRIEL GUDMUNDSSON",0],["SWE 5","Emil Holm",1],["SWE 6","Victor Nilsson Lindelöf",1],["SWE 7","VICTOR NILSSON LINDELOF",1],["SWE 8","GUSTAF LAGERBIELKE",0],["SWE 9","LUCAS BERGVALL",0],["SWE 10","HUGO LARSSON",0],["SWE 11","YASIN AYARI",0],["SWE 12","MATTIAS SVANBERG",0],["SWE 13","",1],["SWE 14","DANIEL SVENSSON",0],["SWE 15","",0],["SWE 16","Roony Bardghji",1],["SWE 17","KEN SEMA",0],["SWE 18","ROONY BARDGHJI",0],["SWE 19","ANTHONY ELANGA",0],["SWE 20","ALEXANDER ISAK",1],["SWE 21","DEJAN KULUSEVSKI",1],["SWE 22","VIKTOR GYÖKERES",1],["SWE TEAM","Emblema da Seleção Sueca",1]]},
+  TUN: { name:"Tunísia", flag:"🇹🇳", group:"F", conf:"CAF",
+    s:[["TUN 1","Fédération Tunisienne de Football",1],["TUN 2","BECHIR BEN SAÏD",1],["TUN 3","AYMEN DAHMEN",1],["TUN 4","BECHIR BEN SAID",0],["TUN 5","AYMEN DAHMEN",0],["TUN 6","YAN VALERY",1],["TUN 7","MONTASSAR TALBI",0],["TUN 8","YASSINE MERIAH",1],["TUN 9","ALI ABDI",0],["TUN 10","AISSA LAÏDOUNI",1],["TUN 11","FERJANI SASSI",1],["TUN 12","MOHAMED ALI BEN ROMDHANE",1],["TUN 13","HANNIBAL MEJBRI",0],["TUN 14","MOHAMED ALI BEN ROMDHANE",0],["TUN 15","ELIAS ACHOURI",1],["TUN 16","ELIAS SAAD",1],["TUN 17","HAZEM MASTOURI",0],["TUN 18","ISMAEL GHARBI",1],["TUN 19","SAYFALLAH LTAIEF",1],["TUN 20","NAÏM SLITI",0]]},
+  // GROUP G
+  BEL: { name:"Bélgica", flag:"🇧🇪", group:"G", conf:"UEFA",
+    s:[["BEL 1","Emblema",1],["BEL 2","THIBAUT COURTOIS",0],["BEL 3","ARTHUR THEATE",1],["BEL 4","TIMOTHY CASTAGNE",1],["BEL 5","ZENO DEBAST",1],["BEL 6","THOMAS MEUNIER",0],["BEL 7","MAXIM DE CUYPER",0],["BEL 8","BRANDON MECHELE",1],["BEL 9","YOURI TIELEMANS",1],["BEL 10","AMADOU ONANA",1],["BEL 11","NICOLAS RASKIN",0],["BEL 12","ALEXIS SAELEMAEKERS",0],["BEL 13","HANS VANAKEN",1],["BEL 14","",0],["BEL 15","",0],["BEL 16","",0],["BEL 17","KEVIN DE BRUYNE",0],["BEL 18","JEREMY DOKU",1],["BEL 19","CHARLES DE KETELAERE",0],["BEL 20","LEANDRO TROSSARD",0],["BEL 21","LOIS OPENDA",1],["BEL 22","ROMELU LUKAKU",1]]},
+  EGY: { name:"Egito", flag:"🇪🇬", group:"G", conf:"CAF",
+    s:[["EGY 1","MOHAMED ELSHENAWY",0],["EGY 2","",0],["EGY 3","YASSER IBRAHIM",1],["EGY 4","MOHAMED HANY",1],["EGY 5","RAMY RABIA",1],["EGY 6","KHALID SOBHI",1],["EGY 7","AHMED FATOUH",1],["EGY 8","MOHAMED HAMDY",1],["EGY 9","HOSSAM ABDELMAGUID",1],["EGY 10","MARWAN ATTIA",0],["EGY 11","ZIZO",1],["EGY 12","HAMDY FATHY",0],["EGY 13","",1],["EGY 14","MOHANAD LASHEEN",0],["EGY 15","EMAM ASHOUR",0],["EGY 16","OSAMA FAISAL",1],["EGY 17","OSAMA FAISAL",0],["EGY 18","TREZEGUET",0],["EGY 19","MOHAMED SALAH",1],["EGY 20","MOSTAFA MOHAMED",1],["EGY 21","OMAR MARMOUSH",1]]},
+  IRN: { name:"Irã", flag:"🇮🇷", group:"G", conf:"AFC",
+    s:[["IRN 1","ALIREZA BEIRANVAND",1],["IRN 2","MORTEZA POURALIGANJI",1],["IRN 3","RAMIN REZAEIAN",1],["IRN 4","EHSAN HAJSAFI",1],["IRN 5","Milad Mohammadi",1],["IRN 6","MILAD MOHAMMADI",1],["IRN 7","SHOJAE KHALILZADEH",1],["IRN 8","HOSSEIN KANAANI",0],["IRN 9","SADEGH MOHARRAMI",1],["IRN 10","SALEH HARDANI",1],["IRN 11","Sadegh Moharrami",1],["IRN 12","SAEED EZATOLAHI",0],["IRN 13","SAMAN GHODDOS",1],["IRN 14","OMID NOORAFKAN",1],["IRN 15","ROOZBEH CHESHMI",0],["IRN 16","MOHAMMAD MOHEBI",0],["IRN 17","Sardar Azmoun",1],["IRN 18","Mehdi Taremi",1],["IRN 19","SARDAR AZMOUN",0],["IRN 20","MEHDI TAREMI",1],["IRN 21","ALIREZA JAHANBAKHSH",1],["IRN 22","ALI GHOLIZADEH",1]]},
+  NZL: { name:"Nova Zelândia", flag:"🇳🇿", group:"G", conf:"OFC",
+    s:[["NZL 1","ALEX PAULSEN",0],["NZL 2","TYLER BINDON",1],["NZL 3","MICHAEL BOXALL",1],["NZL 4","MICHAEL BOXALL",1],["NZL 5","MAX CROCOMBE",1],["NZL 6","LIBERATO CACACE",1],["NZL 7","TIM PAYNE",1],["NZL 8","FRANCIS DE VRIES",1],["NZL 9","FINN SURMAN",1],["NZL 10","JOE BELL",1],["NZL 11","SARPREET SINGH",1],["NZL 12","RYAN THOMAS",0],["NZL 13","MATTHEW GARBETT",1],["NZL 14","MARKO STAMENIĆ",1],["NZL 15","ELIJAH JUST",1],["NZL 16","BEN OLD",1],["NZL 17","CALLUM MCCOWATT",1],["NZL 18","CHRIS WOOD",1],["NZL 19","KOSTA BARBAROUSES",1],["(EQUIPE)","Nova Zelândia - Equipe",1]]},
+  // GROUP H
+  ESP: { name:"Espanha", flag:"🇪🇸", group:"H", conf:"UEFA",
+    s:[["ESP 1","UNAI SIMÓN",1],["ESP 2","ROBIN LE NORMAND",1],["ESP 3","ROBIN LE NORMAND",1],["ESP 4","AYMERIC LAPORTE",1],["ESP 5","DANI CARVAJAL",1],["ESP 6","MARC CUCURELLA",0],["ESP 7","DEAN HUIJSEN",1],["ESP 8","MARC CUCURELLA",1],["ESP 9","MARTIN ZUBIMENDI",0],["ESP 10","RODRI",0],["ESP 11","PEDRI",1],["ESP 12","",0],["ESP 13","FABIÁN RUIZ",0],["ESP 14","MIKEL MERINO",0],["ESP 15","LAMINE YAMAL",0],["ESP 16","DANI OLMO",0],["ESP 17","NICO WILLIAMS",0],["ESP 18","FERRAN TORRES",0],["ESP 19","ÁLVARO MORATA",1],["ESP 20","MIKEL OYARZABAL",1],["ESP TEAM","Emblema da Seleção Espanhola",1]]},
+  KSA: { name:"Arábia Saudita", flag:"🇸🇦", group:"H", conf:"AFC",
+    s:[["KSA 1","NAWAF ALAQIDI",0],["KSA 2","ABDULLAH ALKHAIBARI",0],["KSA 3","ABDULRAHMAN ALSANBI",1],["KSA 4","SAUD ABDULHAMID",1],["KSA 5","MOTEB ALHARBI",1],["KSA 6","NASSER ALDAWSARI",0],["KSA 7","NAWAF BUWASHL",1],["KSA 8","HASSAN ALTAMBAKTI",0],["KSA 9","MUSAB ALJUWAYR",1],["KSA 10","ZIVAD ALJOHANI",1],["KSA 11","ABDULRAHMAN ALSANBI",1],["KSA 12","SAUD ABDULHAMID",1],["KSA 13","MANF BUWASHL",0],["KSA 14","SALEH ABU ALSHAMAT",1],["KSA 15","JEHAD THIKRI",0],["KSA 16","FERAS ALBRIKAN",1],["KSA 17","SALEH ABU ALSHAMAT",0],["KSA 18","MARWAN ALSAHAFI",1],["KSA 19","SALEM ALDAWSARI",1],["KSA 20","ABDULRAHMAN ALOBUD",0],["KSA 21","FERAS ALBRIKAN",1],["KSA 22","SALEH ALSHEHRI",1],["KSA 23","ABDULLAH ALHAMDAN",1]]},
+  URU: { name:"Uruguai", flag:"🇺🇾", group:"H", conf:"CONMEBOL",
+    s:[["URU 1","SERGIO ROCHET",1],["URU 2","GIORIAN DE ARRASCAETA",1],["URU 3","SANTIAGO MELE",1],["URU 4","RONALD ARAÚJO",0],["URU 5","JOSE MARIA GIMÉNEZ",0],["URU 6","SEBASTIAN CÁCERES",0],["URU 7","MATHIAS OLIVERA",1],["URU 8","MANUEL UGARTE",0],["URU 9","GUILLERMO VARELA",0],["URU 10","NAHITAN NÁNDEZ",1],["URU 11","RODRIGO BENTANCUR",1],["URU 12","FEDERICO VALVERDE",0],["URU 13","NICOLÁS DE LA CRUZ",1],["URU 14","",0],["URU 15","MAX ARAÚJO",1],["URU 16","FEDERICO VINAS",1],["URU 17","DARWIN NÚÑEZ",1],["URU 18","FACUNDO PELLISTRI",1],["URU 19","",0],["URU 20","",0]]},
+  CPV: { name:"Cabo Verde", flag:"🇨🇻", group:"H", conf:"CAF",
+    s:[["CPV 1","Ryan Mendes",1],["CPV 2","Vozinha",0],["CPV 3","Márcio",0],["CPV 4","Kenny Rocha",0],["CPV 5","Diney",1],["CPV 6","Pico",0],["CPV 7","Beto Tavares",0],["CPV 8","Escudo Federação Cabo-verdiana",1],["CPV 9","Djaniny",0],["CPV 10","Tavares Mendes",0],["CPV 11","Jovane Cabral",0],["CPV 12","Garry Rodrigues",0],["CPV 13","Foto equipe / destaque",1],["CPV 14","Vagner",0],["CPV 15","Jamiro Monteiro",0],["CPV 16","Roberto Lopes",1],["CPV 17","João Paulo",1],["CPV 18","Kevin Pina",0],["CPV 19","Nuno Borges",0],["CPV 20","Bebé",0]]},
+  // GROUP I
+  FRA: { name:"França", flag:"🇫🇷", group:"I", conf:"UEFA",
+    s:[["FRA 1","MIKE MAIGNAN",0],["FRA 2","",0],["FRA 3","THEO HERNÁNDEZ",1],["FRA 4","DAYOT UPAMECANO",1],["FRA 5","JULES KOUNDÉ",0],["FRA 6","IBRAHIMA KONATÉ",0],["FRA 7","WILLIAM SALIBA",1],["FRA 8","LUCAS DIGNE",1],["FRA 9","AURÉLIEN TCHOUAMÉNI",0],["FRA 10","EDUARDO CAMAVINGA",0],["FRA 11","RANDAL KOLO MUANI",1],["FRA 12","ADRIEN RABIOT",0],["FRA 13","",0],["FRA 14","MICHAEL OLISE",1],["FRA 15","OUSMANE DEMBÉLÉ",0],["FRA 16","",0],["FRA 17","BRADLEY BARCOLA",0],["FRA 18","DESIRE DOUÉ",1],["FRA 19","KINGSLEY COMAN",0],["FRA 20","HUGO EKITIKÉ",0],["FRA 21","KYLIAN MBAPPE",1],["FRA 22","KYLIAN MBAPPE",1],["FRA 23","WILLIAM SALIBA",1]]},
+  IRQ: { name:"Iraque", flag:"🇮🇶", group:"I", conf:"AFC",
+    s:[["IRQ 1","AKAM HASHEM",0],["IRQ 2","",0],["IRQ 3","",0],["IRQ 4","",1],["IRQ 5","",0],["IRQ 6","MERCHAS DOSKI",0],["IRQ 7","ZAID TAHSEEN",0],["IRQ 8","MANAF YOUNIS",0],["IRQ 9","ZDANE IQBAL",1],["IRQ 10","AMIR AL-AMMARI",0],["IRQ 11","JALAL HASSAN",0],["IRQ 12","IBRAHIM BAYESH",0],["IRQ 13","ALI JASIM",0],["IRQ 14","AMAR SHER",1],["IRQ 15","",0],["IRQ 16","MARKO FARJI",0],["IRQ 17","OSAMA RASHID",0],["IRQ 18","",0],["IRQ 19","AYMEN HUSSEIN",0],["IRQ 20","MOHANAD ALI",0]]},
+  NOR: { name:"Noruega", flag:"🇳🇴", group:"I", conf:"UEFA",
+    s:[["NOR 1","",0],["NOR 2","Ørjan Nyland",1],["NOR 3","JULIAN RYERSON",1],["NOR 4","LEO ØSTIGARD",1],["NOR 5","KRISTOFFER VASSBAKK AJER",1],["NOR 6","",1],["NOR 7","DAVID MØLLER WOLFE",1],["NOR 8","SANDER BERGE",1],["NOR 9","ØRJAN NYLAND",1],["NOR 10","MORTEN THORSBY",1],["NOR 11","MARCUS HOLMGREN PEDERSEN",1],["NOR 12","ANDREAS SCHJELDERUP",1],["NOR 13","MARTIN ØDEGAARD",0],["NOR 14","",0],["NOR 15","Patrick Berg",1],["NOR 16","Erling Haaland",1],["NOR 17","Alexander Sørloth",1],["NOR 18","PATRICK BERG",1],["NOR 19","ERLING HAALAND",1],["NOR 20","OSCAR BOBB",0],["NOR 21","ALEXANDER SØRLOTH",1],["NOR 22","JØRGEN STRAND LARSEN",1],["NOR 23","ANTONIO NUSA",1]]},
+  SEN: { name:"Senegal", flag:"🇸🇳", group:"I", conf:"CAF",
+    s:[["SEN 0","Federação Senegalesa de Futebol",1],["SEN 1","EL HADJI MALICK DIOUF",1],["SEN 2","KALIDOU KOULIBALY",1],["SEN 3","MOUSSA NIAKHATE",0],["SEN 4","ABDOULAYE SECK",1],["SEN 5","KALIDOU KOULIBALY",0],["SEN 6","EDOUARD MENDY",1],["SEN 7","ISMAIL JAKOBS",1],["SEN 8","ISMAILA SARR",1],["SEN 9","IDRISSA GANA GUEYE",0],["SEN 10","SADIO MANE",0],["SEN 11","PAPE GUEYE",0],["SEN 12","LAMINE CAMARA",1],["SEN 13","ISMAILA SARR",1],["SEN 14","YEHVANN DIOUF",0],["SEN 15","ELHAJI MALICK DIOUF",0],["SEN 16","PAPE MATAR SARR",1],["SEN 17","BOULAYE DIA",1],["SEN 18","ILIMAN NDIAYE",0],["SEN 19","NICOLAS JACKSON",0],["SEN 20","KREPIN DIATTA",0]]},
+  // GROUP J
+  ALG: { name:"Argélia", flag:"🇩🇿", group:"J", conf:"CAF",
+    s:[["ALG 1","RAMY BENSEBAINI",1],["ALG 2","Ramiz Zerrouki",1],["ALG 3","Ramy Bensebaini",1],["ALG 4","ALEXE QUENDOUZ",0],["ALG 5","YOUCEF ATAL",1],["ALG 6","AISSA MANDI",1],["ALG 7","ISMAIL BENNACER",1],["ALG 8","HOUSSEM AOUAR",0],["ALG 9","NABIL BENTALEB",1],["ALG 10","HICHAM BOUDAOUI",1],["ALG 11","MOHAMED AMINE TOUGAI",1],["ALG 12","",0],["ALG 13","Anis Hadj Moussa",1],["ALG 14","Amine Gouiri",1],["ALG 15","RIYAD MAHREZ",1],["ALG 16","SAID BENRAHMA",0],["ALG 17","ANDY HADJ MOUSSA",1],["ALG 18","",0],["ALG 19","AMINE GOUIRI",0],["ALG 20","BAGHDAD BOUNEDJAH",0],["ALG 21","MOHAMMED AMOURA",1]]},
+  ARG: { name:"Argentina", flag:"🇦🇷", group:"J", conf:"CONMEBOL",
+    s:[["ARG 1","EMILIANO MARTINEZ",0],["ARG 2","EXEQUIEL PALACIOS",0],["ARG 3","LEANDRO PAREDES",1],["ARG 4","NAHUEL MOLINA",1],["ARG 5","CRISTIAN ROMERO",0],["ARG 6","NICOLAS OTAMENDI",0],["ARG 7","NICOLAS TAGLIAFICO",1],["ARG 8","LEONARDO BALERDI",1],["ARG 9","ENZO FERNÁNDEZ",1],["ARG 10","ALEXIS MAC ALLISTER",0],["ARG 11","MCO PAZ",1],["ARG 12","RODRIGO DE PAUL",1],["ARG 13","FRANCO MASTANTUONO",1],["ARG 14","LEANDRO PAREDES",1],["ARG 15","NICO GONZÁLEZ",0],["ARG 16","LIONEL MESSI",0],["ARG 17","EXEQUIEL PALACIOS",1],["ARG 18","NICO PAZ",1],["ARG 19","JULIAN ALVAREZ",0],["ARG 20","LAUTARO MARTINEZ",0],["ARG 21","GIULIANO SIMEONE",1]]},
+  AUT: { name:"Áustria", flag:"🇦🇹", group:"J", conf:"UEFA",
+    s:[["AUT 1","",0],["AUT 2","PATRICK PENTZ",0],["AUT 3","DAVID ALABA",0],["AUT 4","KEVIN DANSO",0],["AUT 5","PHILIPP LIENHART",1],["AUT 6","",0],["AUT 7","STEFAN POSCH",0],["AUT 8","PHILLIPP MWENE",0],["AUT 9","FLORIAN GRILLITSCH",1],["AUT 10","NICOLAS SEIWALD",1],["AUT 11","",0],["AUT 12","ALEXANDER SCHLAGER",0],["AUT 13","MARCEL SABITZER",1],["AUT 14","KONRAD LAIMER",1],["AUT 15","",1],["AUT 16","ROMANO SCHMID",0],["AUT 17","PATRICK WIMMER",1],["AUT 18","XAVER SCHLAGER",1],["AUT 19","ALEXANDER PRASS",1],["AUT 20","CHRISTOPH BAUMGARTNER",1],["AUT 21","MICHAEL GREGORITSCH",1],["AUT 22","MARKO ARNAUTOVIĆ",1],["AUT EMBLEMA","Emblema da Federação Austríaca (ÖFB)",1]]},
+  JOR: { name:"Jordânia", flag:"🇯🇴", group:"J", conf:"AFC",
+    s:[["JOR 1","",0],["JOR 2","",0],["JOR 3","",0],["JOR 4","NOOR AL-RAWABDEH",1],["JOR 5","ABU HASHISH",0],["JOR 6","NAZAN AL-ARAB",0],["JOR 7","SALEEM OBAID",0],["JOR 8","MOHAMMAD ABUALNADI",1],["JOR 9","EHSAAN HADDAD",1],["JOR 10","NIZAR AL-RASHDAN",0],["JOR 11","VAIZ ABLAKA",0],["JOR 12","ABDALLAH NASIS",0],["JOR 13","AMER JAMOUS",1],["JOR 14","MOSAWAD ABU TAHA",1],["JOR 15","MOUSA AL-TAAMARI",1],["JOR 16","AN AL-NAIMAT",1],["JOR 17","MAMOUD AL-MAND",1],["JOR 18","MOHANNAD AL-KHAIR",1],["JOR 19","",0],["JOR 20","MOHAMMAD ABU ZRAVO",0],["JOR 21","IBRAHIM SABRA",1]]},
+  // GROUP K
+  COL: { name:"Colômbia", flag:"🇨🇴", group:"K", conf:"CONMEBOL",
+    s:[["COL 1","Camilo Vargas",1],["COL 2","Daniel Muñoz",1],["COL 3","DAVINSON SÁNCHEZ",0],["COL 4","YERRY MINA",0],["COL 5","CAMILO VARGAS",0],["COL 6","",0],["COL 7","JOHAN MOJICA",0],["COL 8","JHON LUCUMÍ",0],["COL 9","SANTIAGO ARIAS",0],["COL 10","JEFFERSON LERMA",0],["COL 11","KEVIN CASTAÑO",1],["COL 12","RICHARD RIOS",1],["COL 13","JORGE CARRASCAL",0],["COL 14","JAMES RODRIGUEZ",1],["COL 15","JUAN FERNANDO QUINTERO",0],["COL 16","Luis Suárez",1],["COL 17","JHON ARIAS",1],["COL 18","LUIS DÍAZ",1],["COL 19","LUIS SUAREZ",1],["COL 20","JHON CORDOBA",0]]},
+  COD: { name:"Congo Rep. Democrática", flag:"🇨🇩", group:"K", conf:"CAF",
+    s:[["COD 1","",0],["COD 2","SAMUEL MOUTOUSSAMY",0],["COD 3","NOAH SADIKI",0],["COD 4","LIONEL MPASI",0],["COD 5","AARON WAN-BISSAKA",0],["COD 6","",0],["COD 7","ARTHUR MASUAKU",0],["COD 8","Cédric Bakambu",1],["COD 9","CHARLES PICKEL",0],["COD 10","NGAL'AVEL MUKAU",0],["COD 11","EDO KAVEMBE",0],["COD 12","CHANCEL MBEMBA",0],["COD 13","Charles Pickel",1],["COD 14","THEO BONGONDA",0],["COD 15","MESCHACK ELIA",0],["COD 16","YOANE WISSA",0],["COD 17","BRIAN CIPENGA",0],["COD 18","FISTON MAVELE",0],["COD 19","NATHANAEL MBUKU",1],["COD 20","CEDRIC BAKAMBU",0]]},
+  UZB: { name:"Uzbequistão", flag:"🇺🇿", group:"K", conf:"AFC",
+    s:[["UZB 1","Utkir Yusupov",1],["UZB 2","Umar Eshmurodov",1],["UZB 3","FARRUKH SAVFIEV",0],["UZB 4","SHERZOD NASRULLAEV",0],["UZB 5","UMAR ESHMURODOV",0],["UZB 6","HUSNIDDIN ALIQULOV",0],["UZB 7","",0],["UZB 8","RUSTAM ASHURMATOV",0],["UZB 9","KHOJIAKBAR ALIJONOV",0],["UZB 10","ABDUKODIR KHUSANOV",0],["UZB 11","OTABEK SHUKUROV",0],["UZB 12","JAMSHID ISKANDEROV",0],["UZB 13","AZIZEK TURGUNDOEV",0],["UZB 14","Oston Urunov",1],["UZB 15","Azizbek Turgunboev",1],["UZB 16","KHOJMAT ERKINOV",0],["UZB 17","ELDOR SHOMURODOV",1],["UZB 18","OSTON URUNOV",0],["UZB 19","JALOLIDDIN MASHARIPOV",0],["UZB 20","ABBOSBE FAVZULLAEV",0]]},
+  POR: { name:"Portugal", flag:"🇵🇹", group:"K", conf:"UEFA",
+    s:[["POR 2","DIOGO COSTA",1],["POR 3","JOSÉ SÁ",1],["POR 4","RÚBEN DIAS",1],["POR 5","JOÃO CANCELO",1],["POR 6","BRUNO FERNANDES",1],["POR 7","DIOGO DALOT",1],["POR 9","NUNO MENDES",1],["POR 10","GONÇALO INÁCIO",1],["POR 11","BERNARDO SILVA",1],["POR 12","VITINHA",0],["POR 13","",1],["POR 14","JOÃO NEVES",1],["POR 15","CRISTIANO RONALDO",1],["POR 16","FRANCISCO TRINCÃO",1],["POR 17","JOÃO FÉLIX",1],["POR 18","GONÇALO RAMOS",1],["POR 19","PEDRO NETO",1],["POR 20","RAFAEL LEÃO",1]]},
+  // GROUP L
+  CRO: { name:"Croácia", flag:"🇭🇷", group:"L", conf:"UEFA",
+    s:[["CRO 1","DOMINIK LIVAKOVIĆ",1],["CRO 2","LUKA VUŠKOVIĆ",1],["CRO 3","DULE CALETA-CAR",1],["CRO 4","DUJE CALETA-CAR",1],["CRO 5","DOMINIK LIVAKOVIĆ",1],["CRO 6","",1],["CRO 7","JOSIP ŠUTALO",1],["CRO 8","KRISTIJAN JAKIĆ",1],["CRO 9","LUKA MODRIĆ",1],["CRO 10","MATEO KOVAČIĆ",1],["CRO 11","MARTIN BATURINA",1],["CRO 12","LOVRO MAJER",1],["CRO 13","LOVRO MAJER",0],["CRO 14","JOŠKO GVARDIOL",1],["CRO 15","JOSIP STANIŠIĆ",1],["CRO 16","LUKA VUŠKOVIĆ",1],["CRO 17","MARIO PAŠALIĆ",1],["CRO 18","PETAR SUČIĆ",1],["CRO 19","MARCO PAŠALIĆ",1],["CRO 20","ANDREJ KRAMARIĆ",1],["CRO 21","ANTE BUDIMIR",1],["CRO 22","FRANJO IVANOVIĆ",1],["CRO 23","NAN PERISIC",1]]},
+  ENG: { name:"Inglaterra", flag:"🏴󠁧󠁢󠁥󠁮󠁧󠁿", group:"L", conf:"UEFA",
+    s:[["ENG 1","Jordan Pickford",1],["ENG 2","—",1],["ENG 3","JOHN STONES",1],["ENG 4","MARC GUEHI",1],["ENG 5","EZRI KONSA",1],["ENG 6","Trent Alexander-Arnold",1],["ENG 7","Reece James",1],["ENG 8","TRENT ALEXANDER-ARNOLD",1],["ENG 9","REECE JAMES",1],["ENG 10","PHIL FODEN",1],["ENG 11","JUDE BELLINGHAM",0],["ENG 12","COLE PALMER",0],["ENG 13","DAN BURN",0],["ENG 14","DECLAN RICE",1],["ENG 15","JORDAN HENDERSON",1],["ENG 16","Ollie Watkins",1],["ENG 17","MORGAN ROGERS",0],["ENG 18","ANTHONY GORDON",1],["ENG 19","BUKAYO SAKA",1],["ENG 20","MARCUS RASHFORD",1],["ENG 21","OLLIE WATKINS",1]]},
+  GHA: { name:"Gana", flag:"🇬🇭", group:"L", conf:"CAF",
+    s:[["GHA 1","",0],["GHA 2","LAWRENCE ATI ZIGI",1],["GHA 3","",0],["GHA 4","MOHAMMED SALISU",0],["GHA 5","ALIDU SEIDU",0],["GHA 6","ALEXANDER DJIKU",1],["GHA 7","GIDEON MENSAH",1],["GHA 8","CALEB WIRENKYI",0],["GHA 9","LAWRENCE ATI ZIGI",0],["GHA 10","THOMAS PARTEY",1],["GHA 11","SALIS ABDUL SAMED",1],["GHA 12","KAMALDEEN SULEMANA",0],["GHA 13","THOMAS PARTEY",0],["GHA 14","MOHAMMED KUDUS",0],["GHA 15","TARIO LAMPTEY",1],["GHA 16","JORDAN AYEW",0],["GHA 17","ANDRE AYEW",0],["GHA 18","OSMAN BUKARI",0],["GHA 19","ANTOINE SEMENVO",1],["GHA 20","JOSEPH PAINTSIL",0]]},
+  PAN: { name:"Panamá", flag:"🇵🇦", group:"L", conf:"CONCACAF",
+    s:[["PAN 1","Orlando Mosquera",1],["PAN 2","Luis Mejía",1],["PAN 3","Eric Davis",1],["PAN 4","ORLANDO MOSQUERA",1],["PAN 5","MICHAEL AMIR MURILLO",1],["PAN 6","ANDRES ANDRADE",1],["PAN 7","FIDEL ESCOBAR",1],["PAN 8","JOSE CÓRDOBA",1],["PAN 9","CESAR BLACKMAN",1],["PAN 10","Aníbal Godoy",1],["PAN 11","Alberto Quintero",1],["PAN 12","ADALBERTO CARRASQUILLA",0],["PAN 13","LUIS MEJÍA",1],["PAN 14","ERIC DAVIS",1],["PAN 15","EDGAR BARCENAS",1],["PAN 16","CARLOS HARVEY",0],["PAN 17","ISMAEL DIAZ",0],["PAN 18","CECILIO WATERMAN",1],["PAN 19","JOSE LUIS RODRIGUEZ",1],["PAN 20","ALBERTO QUINTERO",1]]},
+  // SPECIAL SECTIONS
+  FWC: { name:"História da Copa", flag:"🏅", group:"Especial", conf:"FIFA",
+    s:[["FWC 1","URUGUAI 1930",1],["FWC 2","ITÁLIA 1934",0],["FWC 3","ITÁLIA 1934 Artilheiro",0],["FWC 4","FRANÇA 1938",0],["FWC 5","BRASIL 1950",0],["FWC 6","SUÍÇA 1954",0],["FWC 7","SUÉCIA 1958",0],["FWC 8","CHILE 1962",0],["FWC 9","ENGLAND 1966",0],["FWC 10","MEXICO 1970",0],["FWC 11","ARGENTINA 1978",1],["FWC 12","ESPANHA 1982",0],["FWC 13","ALEMANHA 1974",0],["FWC 14","MÉXICO 1986",0],["FWC 15","ITÁLIA 1990",0],["FWC 16","CORÉIA/JAPÃO 2002",0],["FWC 17","ALEMANHA 2006",0],["FWC 18","BRASIL 2014",0],["FWC 19","ÁFRICA DO SUL 2010",0],["FWC 20","RÚSSIA 2018",0],["FWC 21","CATAR 2022",0],["FWC 22","Museum",0],["FWC 23","ITÁLIA 1982",1],["FWC 24","ARGENTINA 1986",1],["FWC 25","ALEMANHA 1990",1],["FWC 26","BRASIL 1994",1],["FWC 27","FRANÇA 1998",1],["FWC 28","ESPANHA 2010",1],["FWC 29","FRANÇA 2018",1],["FWC 30","ARGENTINA 2022",1],["FWC LOGO","Logo Copa do Mundo 2026",1]]},
+  CC: { name:"Coca-Cola Stars", flag:"🥤", group:"Especial", conf:"Patrocínio",
+    s:[["CC 1","",0],["CC 2","James Rodríguez",0],["CC 3","Enner Valencia",1],["CC 4","Gabriel Magalhães",1],["CC 5","",0],["CC 6","",0],["CC 7","Lamine Yamal",1],["CC 8","Harry Kane",1],["CC 9","Joshua Kimmich",1],["CC 10","Lamine Yamal",0],["CC 11","Federico Valverde",1],["CC 12","Virgil van Dijk",1],["CC 13","Virgil van Dijk",1],["CC 14","Alphonso Davies",0],["CC 15","Santiago Giménez",1],["CC 16","Emiliano Martínez",1],["CC 17","Lautaro Martínez",1],["CC 18","Raúl Jiménez",1]]},
+  ART: { name:"Artilheiros da Copa", flag:"⚽", group:"Especial", conf:"FIFA",
+    s:[["ART 4","Garrincha / Vavá / Sánchez / Albert / Ivanov / Jerković",1],["ART 5","Oldřich Nejedlý",1],["ART 6","James Rodríguez",1],["ART 7","Leônidas",1],["ART 8","Guillermo Stábile",1],["ART 9","Ademir",1],["ART 10","Gerd Müller",1],["ART 11","Sándor Kocsis",1],["ART 13","Just Fontaine",1],["ARTILHEIROS 6","Hristo Stoichkov",1]]},
+};
+
+// ============================================================
+// CLOUD SYNC — Supabase
+// (preencher após criar projeto em supabase.com)
+// ============================================================
+const SUPABASE_URL      = '';   // ex: https://xyzxyzxyz.supabase.co
+const SUPABASE_ANON_KEY = '';   // chave anon pública do projeto
+const CLOUD_ID          = 'copa2026_familia';
+
+function _sbHeaders(extra) {
+  return Object.assign({
+    'apikey': SUPABASE_ANON_KEY,
+    'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+    'Content-Type': 'application/json'
+  }, extra || {});
+}
+
+async function cloudLoad() {
+  if (!SUPABASE_URL) return null;
+  const r = await fetch(
+    SUPABASE_URL + '/rest/v1/album_state?id=eq.' + CLOUD_ID + '&select=state',
+    { headers: _sbHeaders() }
+  );
+  if (!r.ok) return null;
+  const rows = await r.json();
+  return rows.length ? rows[0].state : null;
+}
+
+let _cloudTimer = null;
+function cloudSaveDebounced() {
+  if (!SUPABASE_URL) return;
+  clearTimeout(_cloudTimer);
+  _cloudTimer = setTimeout(_cloudSaveNow, 2000);
+}
+
+async function _cloudSaveNow() {
+  if (!SUPABASE_URL) return;
+  setDbStatus('Sincronizando...', '');
+  try {
+    const r = await fetch(SUPABASE_URL + '/rest/v1/album_state', {
+      method: 'POST',
+      headers: _sbHeaders({ 'Prefer': 'resolution=merge-duplicates' }),
+      body: JSON.stringify({ id: CLOUD_ID, state, updated_at: new Date().toISOString() })
+    });
+    setDbStatus(r.ok ? '☁️ Salvo na nuvem' : '⚠️ Erro ao salvar', r.ok ? 'saved' : 'unsaved');
+  } catch(e) {
+    setDbStatus('Offline — salvo no navegador', '');
+  }
+}
+
+// ============================================================
+// STATE MANAGEMENT
+// ============================================================
+const STORAGE_KEY = 'copa2026_album_v3';
+let state = {}; // code -> 0 (missing), 1 (collected), 2 (double)
+let currentSection = null;
+let currentTab = 'overview';
+let searchQuery = '';
+let filterMode = 'all'; // all, missing, collected, double
+
+async function loadState() {
+  // 1. Ponto de partida: localStorage (funciona offline)
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    state = saved ? JSON.parse(saved) : {};
+  } catch(e) { state = {}; }
+
+  // 2. Nuvem sobrescreve localStorage (dispositivos sempre sincronizados)
+  if (SUPABASE_URL) {
+    try {
+      setDbStatus('Conectando à nuvem...', '');
+      const cloudState = await cloudLoad();
+      if (cloudState && Object.keys(cloudState).length > 0) {
+        state = cloudState;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        setDbStatus('☁️ Dados da nuvem', 'saved');
+      } else if (!Object.keys(state).length) {
+        _initFromAlbum();  // primeira vez: inicializa de inAlbum
+      }
+    } catch(e) {
+      setDbStatus('Offline — dados locais', '');
+    }
+  } else {
+    if (!Object.keys(state).length) _initFromAlbum();
+  }
+
+  // 3. Sincroniza BIDIRECIONALMENTE com inAlbum (planilhas CSV são fonte de verdade):
+  //    - inAlbum=1 e state=0 → promove para "colada"
+  //    - inAlbum=0 e state=1 → rebaixa para "faltando"
+  //    - state=2 (repetida) nunca é rebaixado
+  let _dirty = false;
+  for (const team of Object.values(TEAMS)) {
+    for (const [code, , inAlbum] of team.s) {
+      const cur = state[code] ?? 0;
+      if (inAlbum === 1 && cur === 0) { state[code] = 1; _dirty = true; }
+      else if (inAlbum === 0 && cur === 1) { state[code] = 0; _dirty = true; }
+    }
+  }
+  if (_dirty) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    cloudSaveDebounced();
+  }
+}
+
+function _initFromAlbum() {
+  state = {};
+  for (const [, team] of Object.entries(TEAMS)) {
+    for (const [code, , inAlbum] of team.s) { state[code] = inAlbum; }
+  }
+}
+
+function initFromPhotos() { _initFromAlbum(); saveState(); }
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  localStorage.setItem('copa2026_savedAt', new Date().toISOString());
+  if (SUPABASE_URL) {
+    cloudSaveDebounced();
+  } else {
+    autoSaveToFile();
+  }
+}
+
+function getStickerState(code) {
+  return state[code] !== undefined ? state[code] : 0;
+}
+
+function cycleState(code) {
+  const current = getStickerState(code);
+  state[code] = (current + 1) % 3;
+  saveState();
+  return state[code];
+}
+
+// ============================================================
+// STATS
+// ============================================================
+function getStats() {
+  let total = 0, collected = 0, doubles = 0, missing = 0;
+  for (const [teamId, team] of Object.entries(TEAMS)) {
+    for (const [code] of team.s) {
+      total++;
+      const s = getStickerState(code);
+      if (s === 0) missing++;
+      else if (s === 1) collected++;
+      else if (s === 2) doubles++;
+    }
+  }
+  return { total, collected, doubles, missing };
+}
+
+function getTeamStats(teamId) {
+  const team = TEAMS[teamId];
+  let total = 0, collected = 0, doubles = 0, missing = 0;
+  for (const [code] of team.s) {
+    total++;
+    const s = getStickerState(code);
+    if (s === 0) missing++;
+    else if (s === 1) collected++;
+    else if (s === 2) doubles++;
+  }
+  return { total, collected, doubles, missing };
+}
+
+// ============================================================
+// RENDER FUNCTIONS
+// ============================================================
+function renderHeader() {
+  const stats = getStats();
+  const pct = Math.round((stats.collected + stats.doubles) / stats.total * 100);
+  document.getElementById('headerStats').innerHTML = `
+    <div class="stat-pill green">✅ ${stats.collected + stats.doubles} Tenho</div>
+    <div class="stat-pill red">❌ ${stats.missing} Faltam</div>
+    <div class="stat-pill gold">⭐ ${stats.doubles} Repetidas</div>
+    <div class="stat-pill">${pct}% Completo</div>
+  `;
+  document.getElementById('mainProgressBar').style.width = pct + '%';
+}
+
+function renderSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const groups = {};
+  for (const [id, team] of Object.entries(TEAMS)) {
+    const g = team.group || 'Especial';
+    if (!groups[g]) groups[g] = [];
+    groups[g].push([id, team]);
+  }
+  let html = '';
+  for (const [groupName, teams] of Object.entries(groups).sort()) {
+    html += `<div class="sidebar-section">
+      <div class="sidebar-group-label">Grupo ${groupName}</div>`;
+    for (const [id, team] of teams.sort((a,b) => a[1].name.localeCompare(b[1].name))) {
+      const ts = getTeamStats(id);
+      const pct = Math.round((ts.collected + ts.doubles) / ts.total * 100);
+      const active = currentSection === id ? 'active' : '';
+      html += `<div class="sidebar-item ${active}" onclick="selectSection('${id}')">
+        <span class="flag">${team.flag}</span>
+        <div class="info">
+          <div class="name">${team.name}</div>
+          <div class="progress">${ts.collected + ts.doubles}/${ts.total}</div>
+          <div class="sidebar-mini-bar"><div class="sidebar-mini-fill" style="width:${pct}%"></div></div>
+        </div>
+      </div>`;
+    }
+    html += '</div>';
+  }
+  sidebar.innerHTML = html;
+}
+
+function selectSection(id) {
+  currentSection = id;
+  switchTab('stickers');
+  renderSidebar();
+  renderMain();
+  window.scrollTo(0, 0);
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + tab)?.classList.add('active');
+  if (tab !== 'stickers') currentSection = null;
+  filterMode = 'all';
+  renderSidebar();
+  renderMain();
+}
+
+function renderMain() {
+  const main = document.getElementById('mainContent');
+  if (searchQuery) {
+    renderSearch(main);
+    return;
+  }
+  switch (currentTab) {
+    case 'overview': renderOverview(main); break;
+    case 'grupos': renderGrupos(main); break;
+    case 'stickers': currentSection ? renderStickerView(main, currentSection) : renderOverview(main); break;
+    case 'missing': renderMissingList(main); break;
+    case 'trade': renderTradeList(main); break;
+  }
+}
+
+function renderOverview(main) {
+  const groups = {};
+  for (const [id, team] of Object.entries(TEAMS)) {
+    const g = team.group || 'Especial';
+    if (!groups[g]) groups[g] = [];
+    groups[g].push([id, team]);
+  }
+
+  let html = `<div class="instructions">
+    <strong>Como usar:</strong> Clique uma vez em uma figurinha para marcá-la como <span style="color:var(--green)">✅ Colada</span>.
+    Clique de novo para marcar como <span style="color:var(--gold)">⭐ Repetida</span> (para trocar).
+    Clique mais uma vez para voltar a <span style="color:var(--red)">❌ Faltando</span>.
+  </div>`;
+
+  for (const [groupName, teams] of Object.entries(groups).sort()) {
+    html += `<h3 style="font-size:13px;color:var(--text2);letter-spacing:1px;text-transform:uppercase;margin:16px 0 8px">
+      GRUPO ${groupName}
+    </h3><div class="country-grid">`;
+    for (const [id, team] of teams.sort((a,b) => a[1].name.localeCompare(b[1].name))) {
+      const ts = getTeamStats(id);
+      const pct = Math.round((ts.collected + ts.doubles) / ts.total * 100);
+      const badgeCount = ts.missing;
+      const doublesCount = ts.doubles;
+      html += `<div class="country-card" onclick="selectSection('${id}')">
+        ${badgeCount > 0 ? `<div class="cbadge">${badgeCount}</div>` : ''}
+        ${doublesCount > 0 ? `<div class="cbadge gold">⭐${doublesCount}</div>` : ''}
+        <div class="flag">${team.flag}</div>
+        <div class="cname">${team.name}</div>
+        <div class="cgroup">Grupo ${team.group} • ${team.conf}</div>
+        <div class="cprog">${ts.collected + ts.doubles}/${ts.total} (${pct}%)</div>
+        <div class="cbar"><div class="cbar-fill" style="width:${pct}%"></div></div>
+      </div>`;
+    }
+    html += '</div>';
+  }
+  main.innerHTML = html;
+}
+
+function renderGrupos(main) {
+  const groups = {};
+  for (const [id, team] of Object.entries(TEAMS)) {
+    const g = team.group || 'Especial';
+    if (!groups[g]) groups[g] = [];
+    groups[g].push([id, team]);
+  }
+  let html = '<div class="groups-grid">';
+  for (const [groupName, teams] of Object.entries(groups).sort()) {
+    let groupTotal = 0, groupCollected = 0;
+    const teamsHtml = teams.sort((a,b) => a[1].name.localeCompare(b[1].name)).map(([id, team]) => {
+      const ts = getTeamStats(id);
+      const pct = Math.round((ts.collected + ts.doubles) / ts.total * 100);
+      groupTotal += ts.total; groupCollected += ts.collected + ts.doubles;
+      return `<div class="group-team-row" onclick="selectSection('${id}')">
+        <span class="flag">${team.flag}</span>
+        <span class="tname">${team.name}</span>
+        <div class="tmini"><div class="tmini-fill" style="width:${pct}%"></div></div>
+        <span class="tprog">${ts.collected + ts.doubles}/${ts.total}</span>
+      </div>`;
+    }).join('');
+    const gPct = Math.round(groupCollected / groupTotal * 100);
+    html += `<div class="group-card">
+      <div class="group-header">
+        <h3>⚽ Grupo ${groupName}</h3>
+        <span class="gprog">${groupCollected}/${groupTotal} (${gPct}%)</span>
+      </div>
+      <div class="group-teams">${teamsHtml}</div>
+    </div>`;
+  }
+  html += '</div>';
+  main.innerHTML = html;
+}
+
+function renderStickerView(main, teamId) {
+  const team = TEAMS[teamId];
+  if (!team) { main.innerHTML = '<div class="empty-state"><div class="icon">🤔</div><h3>País não encontrado</h3></div>'; return; }
+
+  const ts = getTeamStats(teamId);
+  const pct = Math.round((ts.collected + ts.doubles) / ts.total * 100);
+
+  let stickers = team.s.map(([code, player, _]) => ({
+    code, player, state: getStickerState(code)
+  }));
+
+  if (filterMode === 'missing') stickers = stickers.filter(s => s.state === 0);
+  else if (filterMode === 'collected') stickers = stickers.filter(s => s.state === 1);
+  else if (filterMode === 'double') stickers = stickers.filter(s => s.state === 2);
+
+  const statusEmojis = ['❌','✅','⭐'];
+  const statusLabels = ['FALTA','TENHO','REPET'];
+  const statusClass = ['missing','collected','double'];
+
+  const doubleCodes = team.s.filter(([c]) => getStickerState(c) === 2).map(([c]) => c);
+  const missingCodes = team.s.filter(([c]) => getStickerState(c) === 0).map(([c]) => c);
+
+  let html = `
+  <button class="back-btn" onclick="switchTab('overview')">← Voltar</button>
+  <div class="section-header">
+    <div class="section-flag">${team.flag}</div>
+    <div class="section-info">
+      <h2>${team.name}</h2>
+      <p>Grupo ${team.group} • ${team.conf} • ${ts.total} figurinhas</p>
+    </div>
+    <div class="section-stats">
+      <div class="stat-pill green">✅ ${ts.collected}</div>
+      <div class="stat-pill red">❌ ${ts.missing}</div>
+      <div class="stat-pill gold">⭐ ${ts.doubles}</div>
+    </div>
+  </div>
+  <div class="progress-bar-wrap" style="margin-bottom:12px">
+    <div class="progress-bar-fill" style="width:${pct}%"></div>
+  </div>
+  <div class="filter-bar">
+    <button class="filter-btn ${filterMode==='all'?'active':''}" onclick="setFilter('all')">Todas (${ts.total})</button>
+    <button class="filter-btn ${filterMode==='collected'?'active':''}" onclick="setFilter('collected')">✅ Tenho (${ts.collected})</button>
+    <button class="filter-btn ${filterMode==='missing'?'active':''}" onclick="setFilter('missing')">❌ Faltam (${ts.missing})</button>
+    <button class="filter-btn ${filterMode==='double'?'active':''}" onclick="setFilter('double')">⭐ Repetidas (${ts.doubles})</button>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot missing"></div>Faltando</div>
+    <div class="legend-item"><div class="legend-dot collected"></div>Tenho</div>
+    <div class="legend-item"><div class="legend-dot double"></div>Repetida</div>
+  </div>
+  <div class="sticker-grid">`;
+
+  for (const {code, player, state: s} of stickers) {
+    html += `<div class="sticker-card ${statusClass[s]}" onclick="openStickerModalByCode('${code}')">
+      <span class="status-label">${statusLabels[s]}</span>
+      <div class="sticker-status">${statusEmojis[s]}</div>
+      <div class="sticker-code">${code}</div>
+      <div class="sticker-player">${player || '—'}</div>
+    </div>`;
+  }
+
+  html += `</div>`;
+
+  if (doubleCodes.length > 0) {
+    html += `<div class="trade-section">
+      <h3>⭐ Para Trocar (${doubleCodes.length})</h3>
+      <div class="trade-list">${doubleCodes.map(c => `<span class="trade-tag have">${c}</span>`).join('')}</div>
+    </div>`;
+  }
+  if (missingCodes.length > 0) {
+    html += `<div class="trade-section" style="margin-top:8px">
+      <h3>❌ Preciso Trocar (${missingCodes.length})</h3>
+      <div class="trade-list">${missingCodes.map(c => `<span class="trade-tag need">${c}</span>`).join('')}</div>
+    </div>`;
+  }
+
+  main.innerHTML = html;
+}
+
+function setFilter(mode) {
+  filterMode = mode;
+  renderMain();
+}
+
+function renderMissingList(main) {
+  const allMissing = [];
+  for (const [teamId, team] of Object.entries(TEAMS)) {
+    for (const [code, player] of team.s) {
+      if (getStickerState(code) === 0) {
+        allMissing.push({ code, player, team: team.name, flag: team.flag, group: team.group });
+      }
+    }
+  }
+  if (allMissing.length === 0) {
+    main.innerHTML = `<div class="empty-state"><div class="icon">🎉</div><h3>Álbum Completo!</h3><p>Parabéns! Você tem todas as figurinhas!</p></div>`;
+    return;
+  }
+  const byGroup = {};
+  for (const item of allMissing) {
+    const g = item.group;
+    if (!byGroup[g]) byGroup[g] = [];
+    byGroup[g].push(item);
+  }
+  let html = `<h2 style="font-size:18px;margin-bottom:16px">❌ Faltam ${allMissing.length} figurinhas</h2>`;
+  for (const [g, items] of Object.entries(byGroup).sort()) {
+    html += `<h3 style="font-size:13px;color:var(--text2);letter-spacing:1px;text-transform:uppercase;margin:14px 0 8px">Grupo ${g}</h3>
+    <div class="missing-grid">`;
+    for (const {code, player, team, flag} of items) {
+      html += `<div class="missing-item" onclick="openStickerModalByCode('${code}')">
+        <span class="flag">${flag}</span>
+        <div class="minfo">
+          <div class="mcode">${code}</div>
+          <div class="mplayer">${player || team}</div>
+        </div>
+        <span style="color:var(--red);font-size:20px">❌</span>
+      </div>`;
+    }
+    html += '</div>';
+  }
+  main.innerHTML = html;
+}
+
+function renderTradeList(main) {
+  const allDoubles = [];
+  for (const [teamId, team] of Object.entries(TEAMS)) {
+    for (const [code, player] of team.s) {
+      if (getStickerState(code) === 2) {
+        allDoubles.push({ code, player, team: team.name, flag: team.flag });
+      }
+    }
+  }
+  if (allDoubles.length === 0) {
+    main.innerHTML = `<div class="empty-state"><div class="icon">⭐</div><h3>Nenhuma repetida</h3><p>As figurinhas repetidas aparecem aqui para você organizar as trocas.</p></div>`;
+    return;
+  }
+  let html = `<h2 style="font-size:18px;margin-bottom:8px">⭐ ${allDoubles.length} Repetidas para Trocar</h2>
+  <p style="color:var(--text2);font-size:13px;margin-bottom:16px">Mostre essa lista para um amigo e troque as figurinhas!</p>
+  <div class="trade-list" style="margin-bottom:24px">`;
+  for (const {code, player, flag} of allDoubles) {
+    html += `<span class="trade-tag have" title="${player}" onclick="openStickerModalByCode('${code}')" style="cursor:pointer">${flag} ${code}</span>`;
+  }
+  html += '</div>';
+
+  const missing = [];
+  for (const [teamId, team] of Object.entries(TEAMS)) {
+    for (const [code, player] of team.s) {
+      if (getStickerState(code) === 0) missing.push({ code, player, flag: team.flag });
+    }
+  }
+  html += `<h3 style="font-size:14px;margin-bottom:8px;margin-top:24px">❌ Você precisa (${missing.length})</h3>
+  <div class="trade-list">`;
+  for (const {code, player, flag} of missing.slice(0, 50)) {
+    html += `<span class="trade-tag need" onclick="openStickerModalByCode('${code}')" style="cursor:pointer" title="${player}">${flag} ${code}</span>`;
+  }
+  if (missing.length > 50) html += `<span style="color:var(--text2);font-size:12px">...e mais ${missing.length - 50}</span>`;
+  html += '</div>';
+  main.innerHTML = html;
+}
+
+function renderSearch(main) {
+  const q = searchQuery.toLowerCase();
+  const results = [];
+  for (const [teamId, team] of Object.entries(TEAMS)) {
+    for (const [code, player] of team.s) {
+      if (code.toLowerCase().includes(q) || player.toLowerCase().includes(q) || team.name.toLowerCase().includes(q)) {
+        results.push({ code, player, team: team.name, flag: team.flag, state: getStickerState(code) });
+      }
+    }
+  }
+  if (results.length === 0) {
+    main.innerHTML = `<div class="empty-state"><div class="icon">🔍</div><h3>Nenhum resultado</h3><p>Tente buscar pelo código (ex: "BRA 10") ou nome do jogador.</p></div>`;
+    return;
+  }
+  const statusEmojis = ['❌','✅','⭐'];
+  const statusClass = ['missing','collected','double'];
+  let html = `<p style="color:var(--text2);font-size:13px;margin-bottom:12px">${results.length} resultado(s) para "<strong>${searchQuery}</strong>"</p>
+  <div class="sticker-grid">`;
+  for (const {code, player, flag, state: s} of results) {
+    html += `<div class="sticker-card ${statusClass[s]}" onclick="openStickerModalByCode('${code}')">
+      <div class="sticker-status">${flag} ${statusEmojis[s]}</div>
+      <div class="sticker-code">${code}</div>
+      <div class="sticker-player">${player || '—'}</div>
+    </div>`;
+  }
+  html += '</div>';
+  main.innerHTML = html;
+}
+
+// ============================================================
+// MODAL
+// ============================================================
+function openStickerModal(code, teamName, teamFlag) {
+  let player = '';
+  for (const team of Object.values(TEAMS)) {
+    const found = team.s.find(([c]) => c === code);
+    if (found) { player = found[1]; break; }
+  }
+  showModal(code, player, teamName, teamFlag);
+}
+
+function openStickerModalByCode(code) {
+  for (const [teamId, team] of Object.entries(TEAMS)) {
+    const found = team.s.find(([c]) => c === code);
+    if (found) {
+      showModal(code, found[1], team.name, team.flag);
+      return;
+    }
+  }
+}
+
+function showModal(code, player, teamName, teamFlag) {
+  const s = getStickerState(code);
+  const statusText = ['❌ Faltando','✅ Tenho no Álbum','⭐ Repetida'];
+  document.getElementById('modalBody').innerHTML = `
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-size:40px;margin-bottom:4px">${teamFlag}</div>
+      <h2>${code}</h2>
+      <p style="font-size:15px;color:var(--text);margin:4px 0">${player || 'Figurinha especial'}</p>
+      <p style="margin-bottom:0">${teamName} • Estado atual: <strong style="color:${['var(--red)','var(--green)','var(--gold)'][s]}">${statusText[s]}</strong></p>
+    </div>
+    <div style="margin-bottom:12px;font-size:13px;color:var(--text2);text-align:center">Clique para alterar o status:</div>
+    <div class="modal-btns">
+      <button class="modal-btn collected ${s===1?'active':''}" onclick="setStatus('${code}',1)">✅ Tenho no Álbum</button>
+      <button class="modal-btn double ${s===2?'active':''}" onclick="setStatus('${code}',2)">⭐ Repetida (para trocar)</button>
+      <button class="modal-btn missing ${s===0?'active':''}" onclick="setStatus('${code}',0)">❌ Faltando</button>
+    </div>`;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function setStatus(code, newState) {
+  state[code] = newState;
+  saveState();
+  closeModalDirect();
+  renderHeader();
+  renderSidebar();
+  renderMain();
+  const labels = ['marcada como Faltando ❌', 'colada no álbum ✅', 'marcada como Repetida ⭐'];
+  showToast(`${code} ${labels[newState]}`);
+}
+
+function closeModal(event) {
+  if (event.target === document.getElementById('modalOverlay')) closeModalDirect();
+}
+function closeModalDirect() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+// ============================================================
+// SEARCH
+// ============================================================
+function handleSearch() {
+  const input = document.getElementById('searchInput');
+  searchQuery = input.value.trim();
+  document.getElementById('clearSearch').style.display = searchQuery ? 'block' : 'none';
+  renderMain();
+}
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  searchQuery = '';
+  document.getElementById('clearSearch').style.display = 'none';
+  renderMain();
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// ============================================================
+// RESET
+// ============================================================
+function confirmReset() {
+  if (confirm('Resetar para o estado inicial do álbum (como nas fotos)? Isso não pode ser desfeito.')) {
+    initFromPhotos();
+    renderAll();
+    showToast('Álbum resetado para estado inicial das fotos!');
+  }
+}
+
+// ============================================================
+// DATABASE — FILE SYSTEM ACCESS API + INDEXEDDB + FALLBACKS
+// ============================================================
+let fileHandle = null;        // FSA handle para auto-save
+let dbDirty = false;          // pendente de salvar no arquivo
+const IDB_NAME = 'copa2026';
+const IDB_STORE = 'meta';
+
+// IndexedDB: persiste o fileHandle entre sessões
+function openIDB() {
+  return new Promise((res, rej) => {
+    const req = indexedDB.open(IDB_NAME, 1);
+    req.onupgradeneeded = e => e.target.result.createObjectStore(IDB_STORE);
+    req.onsuccess = e => res(e.target.result);
+    req.onerror = () => rej(req.error);
+  });
+}
+async function idbSet(key, value) {
+  const db = await openIDB();
+  return new Promise((res, rej) => {
+    const tx = db.transaction(IDB_STORE, 'readwrite');
+    tx.objectStore(IDB_STORE).put(value, key);
+    tx.oncomplete = res; tx.onerror = rej;
+  });
+}
+async function idbGet(key) {
+  const db = await openIDB();
+  return new Promise((res, rej) => {
+    const tx = db.transaction(IDB_STORE, 'readonly');
+    const req = tx.objectStore(IDB_STORE).get(key);
+    req.onsuccess = () => res(req.result);
+    req.onerror = rej;
+  });
+}
+
+function setDbStatus(msg, dot) {
+  const d = document.getElementById('dbDot');
+  const t = document.getElementById('dbStatusText');
+  if (d) { d.className = 'db-dot ' + (dot || ''); }
+  if (t) t.textContent = msg;
+}
+
+// Salvar para arquivo via File System Access API
+async function saveToFile() {
+  if (!('showSaveFilePicker' in window)) {
+    showToast('⚠️ Use o botão Backup para salvar como JSON');
+    return;
+  }
+  try {
+    if (!fileHandle) {
+      fileHandle = await window.showSaveFilePicker({
+        suggestedName: 'album-copa-2026-dados.json',
+        types: [{ description: 'Dados do Álbum', accept: { 'application/json': ['.json'] } }]
+      });
+      await idbSet('fileHandle', fileHandle);
+    }
+    await writeToFileHandle(fileHandle);
+    showToast('💾 Dados salvos no arquivo!');
+    setDbStatus('Arquivo: ' + fileHandle.name, 'saved');
+    dbDirty = false;
+  } catch (e) {
+    if (e.name !== 'AbortError') showToast('Erro ao salvar: ' + e.message);
+  }
+}
+
+async function writeToFileHandle(handle) {
+  const writable = await handle.createWritable();
+  const data = { state, childName: getChildName(), savedAt: new Date().toISOString(), version: 3 };
+  await writable.write(JSON.stringify(data, null, 2));
+  await writable.close();
+}
+
+// Carregar de arquivo via FSA
+async function loadFromFile() {
+  if (!('showOpenFilePicker' in window)) {
+    document.getElementById('uploadInput').click();
+    return;
+  }
+  try {
+    const [handle] = await window.showOpenFilePicker({
+      types: [{ description: 'Dados do Álbum', accept: { 'application/json': ['.json'] } }]
+    });
+    fileHandle = handle;
+    await idbSet('fileHandle', fileHandle);
+    const file = await handle.getFile();
+    await applyFileData(await file.text());
+    showToast('📂 Dados carregados de ' + handle.name + '!');
+    setDbStatus('Arquivo: ' + handle.name, 'saved');
+  } catch (e) {
+    if (e.name !== 'AbortError') showToast('Erro ao carregar: ' + e.message);
+  }
+}
+
+// Auto-reconectar handle salvo no IDB
+async function tryReconnectFileHandle() {
+  try {
+    const handle = await idbGet('fileHandle');
+    if (!handle) return;
+    const perm = await handle.queryPermission({ mode: 'readwrite' });
+    if (perm === 'granted') {
+      fileHandle = handle;
+      // Lê o arquivo para verificar se é mais recente que localStorage
+      const file = await handle.getFile();
+      const text = await file.text();
+      const diskData = JSON.parse(text);
+      const diskTime = new Date(diskData.savedAt || 0);
+      const lsTime = new Date(localStorage.getItem('copa2026_savedAt') || 0);
+      if (diskTime > lsTime) {
+        if (confirm(`📂 Arquivo "${handle.name}" tem dados mais recentes (${diskData.savedAt?.slice(0,10)}). Carregar do arquivo?`)) {
+          await applyFileData(text);
+        }
+      }
+      setDbStatus('Arquivo: ' + handle.name, 'saved');
+    } else {
+      setDbStatus('Clique 💾 para reconectar arquivo', 'unsaved');
+    }
+  } catch (e) { /* silencioso */ }
+}
+
+async function applyFileData(text) {
+  try {
+    const data = JSON.parse(text);
+    state = data.state || data; // compatibilidade com formato antigo
+    if (data.childName) {
+      const inp = document.getElementById('childName');
+      if (inp) inp.value = data.childName;
+      localStorage.setItem('copa2026_childName', data.childName);
+    }
+    saveState();
+    renderAll();
+  } catch (e) {
+    showToast('Arquivo inválido: ' + e.message);
+  }
+}
+
+// Auto-save no arquivo após cada mudança
+async function autoSaveToFile() {
+  if (!fileHandle) { setDbStatus('Salvo no navegador', ''); return; }
+  try {
+    const perm = await fileHandle.queryPermission({ mode: 'readwrite' });
+    if (perm === 'granted') {
+      await writeToFileHandle(fileHandle);
+      setDbStatus('Arquivo: ' + fileHandle.name, 'saved');
+      dbDirty = false;
+      localStorage.setItem('copa2026_savedAt', new Date().toISOString());
+    } else {
+      dbDirty = true;
+      setDbStatus('⚠️ Permissão expirou — clique 💾', 'unsaved');
+    }
+  } catch (e) { dbDirty = true; }
+}
+
+// FALLBACK: download JSON
+function downloadBackup() {
+  const data = { state, childName: getChildName(), savedAt: new Date().toISOString(), version: 3 };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'album-copa-2026-dados.json'; a.click();
+  URL.revokeObjectURL(url);
+  showToast('⬇️ Backup baixado!');
+}
+
+// FALLBACK: restaurar de upload
+function restoreFromUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async e => {
+    await applyFileData(e.target.result);
+    showToast('⬆️ Dados restaurados de ' + file.name + '!');
+    setDbStatus('localStorage (backup restaurado)', 'saved');
+  };
+  reader.readAsText(file);
+  input.value = '';
+}
+
+// Nome da criança
+function getChildName() {
+  return document.getElementById('childName')?.value || localStorage.getItem('copa2026_childName') || '';
+}
+function saveChildName() {
+  localStorage.setItem('copa2026_childName', getChildName());
+}
+function loadChildName() {
+  const name = localStorage.getItem('copa2026_childName') || '';
+  const inp = document.getElementById('childName');
+  if (inp && name) inp.value = name;
+}
+
+// ============================================================
+// PRINT — LISTA PARA TROCAS
+// ============================================================
+function printReport() {
+  const name = getChildName() || '_______________';
+  const today = new Date().toLocaleDateString('pt-BR');
+  const stats = getStats();
+
+  // Montar dados por grupo/país
+  const groups = {};
+  for (const [teamId, team] of Object.entries(TEAMS)) {
+    const g = team.group;
+    if (!groups[g]) groups[g] = [];
+    const doubles = team.s.filter(([c]) => getStickerState(c) === 2).map(([c, p]) => ({ code: c, player: p }));
+    const missing = team.s.filter(([c]) => getStickerState(c) === 0).map(([c, p]) => ({ code: c, player: p }));
+    if (doubles.length > 0 || missing.length > 0) {
+      groups[g].push({ id: teamId, team, doubles, missing });
+    }
+  }
+
+  function tagList(items, cls) {
+    if (!items.length) return '<span style="color:#aaa;font-style:italic;font-size:10px">Nenhuma</span>';
+    return items.map(i => `<span class="tag ${cls}" title="${i.player}">${i.code}</span>`).join('');
+  }
+
+  let groupRows = '';
+  for (const [g, teams] of Object.entries(groups).sort()) {
+    for (const { team, doubles, missing } of teams.sort((a,b) => a.team.name.localeCompare(b.team.name))) {
+      groupRows += `
+        <tr>
+          <td class="team-cell"><span class="gflag">${team.flag}</span><span class="gname">${team.name}</span><span class="ggrp">Gr.${g}</span></td>
+          <td class="tags-cell have">${tagList(doubles, 'have')}</td>
+          <td class="tags-cell need">${tagList(missing, 'need')}</td>
+        </tr>`;
+    }
+  }
+
+  const totalDoubles = Object.values(TEAMS).reduce((n, t) => n + t.s.filter(([c]) => getStickerState(c) === 2).length, 0);
+  const totalMissing = stats.missing;
+
+  const html = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Lista de Trocas — ${name}</title>
+<style>
+  @page { size: A4 landscape; margin: 12mm 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; font-size: 11px; color: #111; background: white; }
+
+  .page-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #1a2f6e; padding-bottom: 8px; margin-bottom: 10px; }
+  .page-title { font-size: 18px; font-weight: 900; color: #1a2f6e; }
+  .page-sub { font-size: 11px; color: #555; margin-top: 2px; }
+  .page-meta { text-align: right; font-size: 11px; }
+  .page-meta strong { display: block; font-size: 16px; color: #d4000f; }
+  .logo { font-size: 36px; }
+
+  .legend { display: flex; gap: 20px; margin-bottom: 10px; font-size: 10px; align-items: center; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 4px; }
+  .tag-demo { border-radius: 4px; padding: 2px 6px; font-size: 10px; font-weight: 700; border: 1.5px solid; }
+  .have-demo { border-color: #e8a000; background: #fff9e6; color: #7a4f00; }
+  .need-demo { border-color: #cc0000; background: #fff0f0; color: #880000; }
+  .note { font-size: 10px; color: #555; margin-left: auto; }
+
+  table { width: 100%; border-collapse: collapse; }
+  th { background: #1a2f6e; color: white; font-size: 11px; font-weight: 700; padding: 5px 8px; text-align: left; }
+  th:first-child { width: 18%; }
+  th:nth-child(2) { width: 41%; }
+  th:nth-child(3) { width: 41%; }
+  tr:nth-child(even) { background: #f8f8f8; }
+  tr:hover { background: #f0f4ff; }
+  td { padding: 4px 6px; vertical-align: middle; border-bottom: 1px solid #e0e0e0; }
+  .team-cell { display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+  .gflag { font-size: 16px; }
+  .gname { font-weight: 700; font-size: 11px; flex: 1; }
+  .ggrp { font-size: 9px; color: #666; background: #eee; border-radius: 3px; padding: 1px 4px; }
+  .tags-cell { padding: 4px 6px; }
+  .tag { border-radius: 4px; padding: 1px 5px; font-size: 9.5px; font-weight: 700; border: 1.5px solid; margin: 1px; display: inline-block; }
+  .have { border-color: #e8a000; background: #fff9e6; color: #7a4f00; }
+  .need { border-color: #cc0000; background: #fff0f0; color: #880000; }
+
+  .footer { margin-top: 14px; border-top: 2px solid #1a2f6e; padding-top: 8px; display: flex; gap: 20px; }
+  .footer-box { flex: 1; border: 1.5px dashed #999; border-radius: 6px; padding: 8px 12px; }
+  .footer-box h3 { font-size: 11px; font-weight: 700; margin-bottom: 6px; color: #333; }
+  .write-line { border-bottom: 1px solid #bbb; height: 20px; margin-bottom: 6px; }
+  .stats-row { display: flex; gap: 16px; flex-wrap: wrap; font-size: 10px; }
+  .stat-box { border: 1.5px solid #ccc; border-radius: 4px; padding: 4px 10px; text-align: center; }
+  .stat-num { font-size: 18px; font-weight: 900; display: block; }
+  .stat-lbl { font-size: 9px; color: #555; }
+  .qr-area { border: 1.5px dashed #999; border-radius: 6px; padding: 8px; text-align: center; min-width: 100px; }
+  .print-instructions { font-size: 9px; color: #666; margin-top: 6px; }
+
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .no-print { display: none; }
+    tr { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="logo">⚽🏆</div>
+    <div>
+      <div class="page-title">Copa do Mundo 2026 — Lista de Trocas</div>
+      <div class="page-sub">Álbum Panini FIFA World Cup 2026™</div>
+    </div>
+  </div>
+  <div class="page-meta">
+    <strong>${name}</strong>
+    <span>Data: ${today}</span>
+    <div class="stats-row" style="margin-top:6px;justify-content:flex-end">
+      <div class="stat-box"><span class="stat-num" style="color:#e8a000">⭐ ${totalDoubles}</span><span class="stat-lbl">Para trocar</span></div>
+      <div class="stat-box"><span class="stat-num" style="color:#cc0000">❌ ${totalMissing}</span><span class="stat-lbl">Precisando</span></div>
+      <div class="stat-box"><span class="stat-num" style="color:#1a2f6e">${stats.collected + stats.doubles}</span><span class="stat-lbl">Tenho (${Math.round((stats.collected+stats.doubles)/stats.total*100)}%)</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><span class="tag-demo have-demo">⭐ CRO 5</span> <span>Tenho <strong>repetida</strong> — posso trocar</span></div>
+  <div class="legend-item"><span class="tag-demo need-demo">❌ BRA 10</span> <span>Está <strong>faltando</strong> — preciso trocar</span></div>
+  <span class="note">💡 Dica: mostre esta lista para um amigo e combinem a troca antes de se encontrarem!</span>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>🌍 País / Grupo</th>
+      <th>⭐ TENHO PARA TROCAR (repetidas)</th>
+      <th>❌ PRECISO (faltando no meu álbum)</th>
+    </tr>
+  </thead>
+  <tbody>
+    ${groupRows}
+  </tbody>
+</table>
+
+<div class="footer">
+  <div class="footer-box">
+    <h3>📝 Anotações de Trocas Combinadas</h3>
+    <div class="write-line"></div>
+    <div class="write-line"></div>
+    <div class="write-line"></div>
+    <div class="write-line"></div>
+    <div class="print-instructions">Anote aqui o nome do amigo e as figurinhas combinadas para troca</div>
+  </div>
+  <div class="footer-box">
+    <h3>📝 Trocas Realizadas — Marque aqui</h3>
+    <div class="write-line"></div>
+    <div class="write-line"></div>
+    <div class="write-line"></div>
+    <div class="write-line"></div>
+    <div class="print-instructions">Após a troca, marque as figurinhas no app e atualize sua lista</div>
+  </div>
+  <div class="footer-box" style="max-width:200px;text-align:center">
+    <h3>📲 Contato para Trocas</h3>
+    <div style="font-size:12px;margin:6px 0"><strong>${name}</strong></div>
+    <div class="write-line" style="margin-bottom:8px"></div>
+    <div style="font-size:10px;color:#555">WhatsApp / Telefone</div>
+    <div class="write-line" style="margin-top:8px"></div>
+    <div style="font-size:10px;color:#555">E-mail</div>
+  </div>
+</div>
+
+<script>window.onload = () => window.print();<\/script>
+</body>
+</html>`;
+
+  const win = window.open('', '_blank', 'width=1100,height=750');
+  win.document.write(html);
+  win.document.close();
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function renderAll() {
+  renderHeader();
+  renderSidebar();
+  renderMain();
+}
+
+loadState().then(() => {
+  loadChildName();
+  renderAll();
+  if (!SUPABASE_URL) {
+    tryReconnectFileHandle().then(() =>
+      setDbStatus(fileHandle ? 'Arquivo: ' + fileHandle.name : 'Salvo no navegador', fileHandle ? 'saved' : '')
+    );
+  }
+});
+</script>
+</body>
+</html>
