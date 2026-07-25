@@ -493,17 +493,16 @@ async function loadState() {
     if (!Object.keys(state).length) _initFromAlbum();
   }
 
-  // 3. Sincroniza BIDIRECIONALMENTE com inAlbum (planilhas CSV são fonte de verdade):
+  // 3. Sincroniza com inAlbum (CSV é fonte de verdade para promoções, nunca rebaixa):
   //    - inAlbum=2 e state<2 → promove para "repetida"
   //    - inAlbum=1 e state=0 → promove para "colada"
-  //    - inAlbum=0 e state=1 → rebaixa para "faltando"
+  //    - inAlbum=0: nunca rebaixa estado salvo pelo usuário
   let _dirty = false;
   for (const team of Object.values(TEAMS)) {
     for (const [code, , inAlbum] of team.s) {
       const cur = state[code] ?? 0;
       if      (inAlbum === 2 && cur < 2)  { state[code] = 2; _dirty = true; }
       else if (inAlbum === 1 && cur === 0) { state[code] = 1; _dirty = true; }
-      else if (inAlbum === 0 && cur === 1) { state[code] = 0; _dirty = true; }
     }
   }
   if (_dirty) {
