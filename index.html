@@ -412,8 +412,8 @@ const TEAMS = {
 // CLOUD SYNC — Supabase
 // (preencher após criar projeto em supabase.com)
 // ============================================================
-const SUPABASE_URL      = 'https://blmahowfhyrsipupjgex.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_f1ebmr5KsYBhi4kg_YQh-g_fonWcwsC';
+const SUPABASE_URL      = 'https://blmahowfhyrsipupjgex.supabase.co';   // ex: https://xyzxyzxyz.supabase.co
+const SUPABASE_ANON_KEY = 'sb_publishable_f1ebmr5KsYBhi4kg_YQh-g_fonWcwsC';   // chave anon pública do projeto
 const CLOUD_ID          = 'copa2026_familia';
 
 function _sbHeaders(extra) {
@@ -493,22 +493,8 @@ async function loadState() {
     if (!Object.keys(state).length) _initFromAlbum();
   }
 
-  // 3. Sincroniza com inAlbum (CSV é fonte de verdade para promoções, nunca rebaixa):
-  //    - inAlbum=2 e state<2 → promove para "repetida"
-  //    - inAlbum=1 e state=0 → promove para "colada"
-  //    - inAlbum=0: nunca rebaixa estado salvo pelo usuário
-  let _dirty = false;
-  for (const team of Object.values(TEAMS)) {
-    for (const [code, , inAlbum] of team.s) {
-      const cur = state[code] ?? 0;
-      if      (inAlbum === 2 && cur < 2)  { state[code] = 2; _dirty = true; }
-      else if (inAlbum === 1 && cur === 0) { state[code] = 1; _dirty = true; }
-    }
-  }
-  if (_dirty) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    cloudSaveDebounced();
-  }
+  // 3. Sem sync automático com inAlbum — o estado da nuvem é autoritativo.
+  //    inAlbum no HTML serve apenas como semente quando não há dado salvo (_initFromAlbum).
 }
 
 function _initFromAlbum() {
